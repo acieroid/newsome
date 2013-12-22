@@ -1,1 +1,1 @@
-Nothing here yet, see the [wiki](Home).
+Nothing here yet, see the [wiki](https://github.com/acieroid/newsome/wiki).
