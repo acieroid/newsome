@@ -41,3 +41,6 @@ DNS="8.8.8.8"
 
 # Debug mode (YES to activate it)
 DEBUG="NO"
+
+# Editor to edit files
+EDITOR="vi"
