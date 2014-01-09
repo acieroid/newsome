@@ -4,86 +4,8 @@
 # be run on a mfsBSD or on a kimsufi in FreeBSD rescue mode for
 # example.
 
-# IMPORTANT: adapt the parameters below before launching it
-
-######################################################################
-##                          Parameters                              ##
-######################################################################
-
-# The installation will completely wipe out the content of this disk
-DISK="ada0"
-
-# The machine's hostname
-# On a kimsufi, set it to your kimsufi's name (ks123456.kimsufi.com)
-HOSTNAME="foo"
-
-# The name of the ethernet interface
-# Do `ifconfig` or `ip link` to find it
-INTERFACE="rl0"
-
-# Static IP address
-# Set to DHCP to have a dynamic one
-# On a kimsufi, look at your current IP (`ifconfig` or `ip addr`)
-IP="inet 192.168.2.110 netmask 255.255.255.0 broadcast 192.168.2.255"
-
-# Address of the router
-# Generally the /24 of your IP followed by .1
-# On a kimsufi, the /24 of your IP followed by .254
-ROUTER="192.168.2.1"
-
-# Size of the swap partition
-# Depends on the usage. Generally 2 times the RAM size is good.
-# On a kimsufi, 4G is fine
-SWAPSIZE="1G"
-
-# FreeBSD version
-FREEBSD_VERSION="9.2-RELEASE"
-
-# Architecture
-ARCH="$(uname -m)"
-
-######################################################################
-##                             Utils                                ##
-######################################################################
-
-DEBUG="NO"
-
-fail_if_no () {
-    read ANSWER
-
-    while [ "$ANSWER" != "y" -a "$ANSWER" != "n" ]; do
-        echo -n "Please answer y or n: "
-        read ANSWER
-        if [ "$ANSWER" = "" ]; then
-            ANSWER="n"
-        fi
-    done
-    if [ "$ANSWER" = "n" ]; then
-        exit 1
-    fi
-}
-
-check () {
-    CMD="$@"
-    echo "$CMD"
-    $CMD
-    if [ "$?" != 0 ]; then
-        echo "ERROR: command $CMD failed, stopping"
-        exit 1
-    fi
-    if [ "$DEBUG" = "YES" ]; then
-        echo "done, press enter to continue"
-        read foo
-    fi
-}
-
-check_prev () {
-    CMD="$@"
-    if [ "$?" != 0 ]; then
-        echo "ERROR: command $CMD failed, stopping"
-        exit 1
-    fi
-}
+. parameters.sh
+. utils.sh
 
 ######################################################################
 ##                     Part 1: check config                         ##
@@ -92,30 +14,26 @@ echo "1. Checking configuration"
 
 UID="$(id -u)"
 if [ "$UID" != 0 ]; then
-    echo -n "WARNING: this script should be run as root (and it is \
-not). Are you sure you want to continue? [y/N]"
-    fail_if_no
+    fail_if_no "WARNING: this script should be run as root (and it is \
+not). Are you sure you want to continue?" "n"
 fi
 
 gpart list "$DISK" > /dev/null
 if [ "$?" -ne 0 ]; then
-    echo -n "WARNING: the following disk does not exist: \
-$DISK. Are you sure you want to continue? [y/N]"
-    fail_if_no
+    fail_if_no "WARNING: the following disk does not exist: \
+$DISK. Are you sure you want to continue?" "n"
 fi
 
-echo -n "WARNING: this script will erase everything present on the \
-following drive: $DISK. Are you OK with that? [y/N] "
-fail_if_no
+fail_if_no "WARNING: this script will erase everything present on the \
+following drive: $DISK. Are you OK with that?" "n"
 
 ifconfig "$INTERFACE" > /dev/null
 if [ "$?" -ne 0 ]; then
-    echo -n "WARNING: the following interface does not exist: \
-$INTERFACE. Are you sure you want to continue? [y/N]"
-    fail_if_no
+    fail_if_no "WARNING: the following interface does not exist: \
+$INTERFACE. Are you sure you want to continue?" "n"
 fi
 
-echo -n "Please review the following configuration carefully:
+fail_if_no "Please review the following configuration carefully:
     DISK=\"$DISK\"
     HOSTNAME=\"$HOSTNAME\"
     INTERFACE=\"$INTERFACE\"
@@ -125,8 +43,7 @@ echo -n "Please review the following configuration carefully:
     FREEBSD_VERSION=\"$FREEBSD_VERSION\"
     ARCH=\"$ARCH\"
 If everything is OK, the script will start the installation.
-OK? [y/N]"
-fail_if_no
+OK?" "n"
 
 ######################################################################
 ##                   Part 2: partition creation                     ##
