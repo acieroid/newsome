@@ -186,12 +186,8 @@ check cd /root/sets
 check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/9.2-RELEASE/base.txz
 check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/9.2-RELEASE/kernel.txz
 
-echo "cat base.txz | tar --unlink -xpJf - -C /mnt/"
-cat base.txz | tar --unlink -xpJf - -C /mnt/
-check_prev
-echo "cat kernel.txz | tar --unlink -xpJf - -C /mnt/"
-cat kernel.txz | tar --unlink -xpJf - -C /mnt/
-check_prev
+check "cat base.txz | tar --unlink -xpJf - -C /mnt/"
+check "cat kernel.txz | tar --unlink -xpJf - -C /mnt/"
 
 ######################################################################
 ##                           Part 5: Chroot                         ##
