@@ -50,7 +50,9 @@ check ezjail-admin create -f master master "lo1|172.16.0.254"
 
 
 echo "Creating build jail (172.16.0.253)"
-check ezjail-admin create -f build buld "lo1|172.16.0.253"
+echo "ifconfig_lo1_alias=\"inet 172.16.0.2 netmask 255.255.255.0\"" >> /etc/rc.conf
+ifconfig lo1 inet 172.16.0.2 netmask 255.255.255.0 alias
+check ezjail-admin create -f build build "lo1|172.16.0.2"
 
 
 echo "Setting up pf"
