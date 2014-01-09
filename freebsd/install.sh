@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This scripts performs a clean install of FreeBSD, using ZFS.  It can
+# This script performs a clean install of FreeBSD, using ZFS. It can
 # be run on a mfsBSD or on a kimsufi in FreeBSD rescue mode for
 # example.
 
@@ -108,7 +108,7 @@ echo -n "WARNING: this script will erase everything present on the \
 following drive: $DISK. Are you OK with that? [y/N] "
 fail_if_no
 
-ifconfig "$INTERFACE" > /dev/null 
+ifconfig "$INTERFACE" > /dev/null
 if [ "$?" -ne 0 ]; then
     echo -n "WARNING: the following interface does not exist: \
 $INTERFACE. Are you sure you want to continue? [y/N]"
@@ -127,7 +127,7 @@ echo -n "Please review the following configuration carefully:
 If everything is OK, the script will start the installation.
 OK? [y/N]"
 fail_if_no
-  
+
 ######################################################################
 ##                   Part 2: partition creation                     ##
 ######################################################################
