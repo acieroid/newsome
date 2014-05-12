@@ -4,8 +4,110 @@
 # be run on a mfsBSD or on a kimsufi in FreeBSD rescue mode for
 # example.
 
-. parameters.sh
-. utils.sh
+# To use:
+# ssh root@ip # mfsbsd connects with dhcp, root password: mfsroot
+# fetch http://path/to/install.sh
+# vi install.sh
+# sh install.sh
+
+######################################################################
+##                          Parameters                              ##
+######################################################################
+
+# The installation will completely wipe out the content of this disk
+DISK="ada0"
+
+# The machine's hostname
+# On a kimsufi, set it to your kimsufi's name (ks123456.kimsufi.com)
+HOSTNAME="foo"
+
+# The name of the ethernet interface
+# Do `ifconfig` or `ip link` to find it
+INTERFACE="rl0"
+
+# Static IP address
+# Set to DHCP to have a dynamic one
+# On a kimsufi, look at your current IP (`ifconfig` or `ip addr`)
+IP="inet 192.168.2.110 netmask 255.255.255.0 broadcast 192.168.2.255"
+
+# Address of the router
+# Generally the /24 of your IP followed by .1
+# On a kimsufi, the /24 of your IP followed by .254
+ROUTER="192.168.2.1"
+
+# Size of the swap partition
+# Depends on the usage. Generally 2 times the RAM size is good.
+# On a kimsufi, 4G is fine
+SWAPSIZE="1G"
+
+# FreeBSD version
+FREEBSD_VERSION="10.0-RELEASE"
+
+# Architecture
+ARCH="$(uname -m)"
+
+# DNS server to use
+DNS="8.8.8.8"
+
+# Debug mode (YES to activate it)
+DEBUG="NO"
+
+# Editor to edit files
+EDITOR="vi"
+
+######################################################################
+##                             Utils                                ##
+######################################################################
+
+ask () {
+    QUESTION="$1"
+    DEFAULT="$2"
+    echo -n "$QUESTION"
+    if [ "$DEFAULT" = "y" ]; then
+        echo -n " [Y/n] "
+    else
+        echo -n " [y/N] "
+    fi
+
+    read ANSWER
+
+    while [ "$ANSWER" != "y" -a "$ANSWER" != "n" ]; do
+        echo -n "Please answer y or n: "
+        read ANSWER
+        if [ "$ANSWER" = "" ]; then
+            ANSWER=DEFAULT
+        fi
+    done
+}
+
+fail_if_no () {
+    ask "$1" "$2"
+    if [ "$ANSWER" = "n" ]; then
+        exit 1
+    fi
+}
+
+check () {
+    CMD="$@"
+    echo "$CMD"
+    $CMD
+    if [ "$?" != 0 ]; then
+        echo "ERROR: command $CMD failed, stopping"
+        exit 1
+    fi
+    if [ "$DEBUG" = "YES" ]; then
+        echo "done, press enter to continue"
+        read foo
+    fi
+}
+
+check_prev () {
+    CMD="$@"
+    if [ "$?" != 0 ]; then
+        echo "ERROR: command $CMD failed, stopping"
+        exit 1
+    fi
+}
 
 ######################################################################
 ##                     Part 1: check config                         ##
@@ -97,14 +199,20 @@ check ln -s usr/home home
 ######################################################################
 echo "4. Installing FreeBSD"
 
-check mkdir -p /root/sets
-check mount -t tmpfs -o size=300000000 dummy /root/sets
+if [ -z $(mount | grep 'tmpfs on /rw/root/sets') ]; then
+    check mkdir -p /root/sets
+    check mount -t tmpfs -o size=300000000 dummy /root/sets
+fi
 check cd /root/sets
-check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/9.2-RELEASE/base.txz
-check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/9.2-RELEASE/kernel.txz
+if [ ! -f base.txz ]; then
+    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/$FREEBSD_VERSION/base.txz
+fi
+if [ ! -f kernel.txz ]; then
+    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/$FREEBSD_VERSION/kernel.txz
+fi
 
-check "cat base.txz | tar --unlink -xpJf - -C /mnt/"
-check "cat kernel.txz | tar --unlink -xpJf - -C /mnt/"
+check tar --unlink -xpJf base.txz -C /mnt/
+check tar --unlink -xpJf kernel.txz -C /mnt/
 
 ######################################################################
 ##                           Part 5: Chroot                         ##
