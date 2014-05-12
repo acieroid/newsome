@@ -22,14 +22,16 @@ cp -Rp /usr/jails/flavours/default /usr/jails/flavours/slave
 
 # pf
 echo 'pf_enable="YES"' >> /etc/rc.conf
-kldload pf.ko
+kldload pf.ko # TODO: replace by service pf start ?
 
 echo 'cloned_interfaces="lo1"' >> /etc/rc.conf
-echo 'ifconfig_lo1="inet 172.16.0.1 netmask 255.255.255.0' >> /etc/rc.conf
+echo 'ifconfig_lo1="inet 172.16.0.1 netmask 255.255.255.0"' >> /etc/rc.conf
 ifconfig lo1 create inet 172.16.0.1 netmask 255.255.255.0
 
-# TODO: copy pf.conf
-# pfctl -F all -f /etc/pf.conf
+# TODO: adapt the pf.conf with the current configuration
+cp pf.conf /etc/pf.conf
+pfctl -F all -f /etc/pf.conf
 
 # master jail
-# ezjail-admin create -f master master "lo1|10.0.0.2"
+ezjail-admin create -f master master "lo1|172.16.0.1"
+ezjail-admin start master
