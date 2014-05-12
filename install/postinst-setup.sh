@@ -48,5 +48,7 @@ ezjail-admin console -e "pkg -y install nginx" master
 cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir -p /usr/jails/master/usr/local/www/master/
 cp master-index.html /usr/jails/master/usr/local/www/master/index.html
+mkdir -p /usr/jails/master/usr/local/www/catchall/
+cp master-catchall-index.html /usr/jails/master/usr/local/www/catchall/index.html
 echo 'nginx_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "service nginx start" master
