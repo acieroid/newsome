@@ -29,11 +29,9 @@ next_ip() {
     fi
 }
 
-
 IP=$(next_ip)
 
 ezjail-admin create -f slave "$JAIL" "lo1|$IP"
 ezjail-admin start "$JAIL"
 ezjail-admin console -e "pkg" "$JAIL" "$JAIL" # TODO: have pkgng already configured in the flavour
-ezjail-admin console -e "pkg install -y '$DEPS'" "$JAIL"
 ezjail-admin console -e "pw group add service"

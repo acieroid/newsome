@@ -33,6 +33,9 @@ fi
 
 LANG="$(extract LANG)"
 TYPE="$(extract TYPE)"
+DEPS="$(extract DEPS)"
+
+ezjail-admin console -e "pkg install -y '$DEPS'" "$JAIL"
 
 case "$TYPE" in
     www)

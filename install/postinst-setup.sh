@@ -13,12 +13,19 @@ cp /usr/jails/flavours/{example,default}/etc/make.conf
 cp /usr/jails/flavours/{example,default}/etc/rc.conf
 cp /usr/jails/flavours/{example,default}/etc/periodic.conf
 cp /etc/resolv.conf /usr/jails/flavours/default/etc/resolv.conf
+cp /usr/jails/flavours/{example,default}/etc/rc.d/ezjail.flavour.example
+mkdir /usr/jails/flavours/default/pkg
+cp /var/cache/pkg-*.txz /usr/jails/flavours/default/pkg/
+
+http://pkg.freebsd.org/freebsd:10:x86:64/release/0/All/pkg-1.2.4_1.txz
 
 # master flavour
 cp -Rp /usr/jails/flavours/default /usr/jails/flavours/master
 
 # slave flavour
 cp -Rp /usr/jails/flavours/default /usr/jails/flavours/slave
+mkdir -p /usr/jails/flavours/slave/root/bin
+cp -Rp ../service-utils/*.sh /usr/jails/flavours/slave/root/bin
 
 # pf
 echo 'pf_enable="YES"' >> /etc/rc.conf
@@ -52,3 +59,7 @@ mkdir -p /usr/jails/master/usr/local/www/catchall/
 cp master-catchall-index.html /usr/jails/master/usr/local/www/catchall/index.html
 echo 'nginx_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "service nginx start" master
+
+# install service/jail manipulation utilities
+mkdir -p /root/bin
+cp ../service-utils/* /root/bin
