@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Set up a jail for a python service
+
+if [ "$#" -ne 1 ]; then
+    echo "$0: expectnig service file in argument"
+    exit 1
+fi
+
+SERVICE_FILE="$1"
+
+extract() {
+    sed -nE "s/^$1=\"(.*)\".*/\1/p" "$SERVICE_FILE" | head -1
+}
+
+JAIL="$(extract JAIL)"
+SERVICE="$(basename $SERVICE_FILE)"
+
+ezjail-admin console -e "pkg install -y python py-virtualenv py-pip" "$JAIL"
+mkdir -p "/usr/jails/$JAIL/root/services/"
+cp "$SERVICE_FILE" "/usr/jails/$JAIL/root/services/$SERVICE"
+ezjail-admin console -e "service-setup-type-python.sh /root/services/$SERVICE" "$JAIL"
