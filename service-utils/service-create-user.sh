@@ -12,14 +12,20 @@ fi
 JAIL="$1"
 USER="$2"
 
+if [ -z $(echo "$USER" | grep -E "^[a-zA-Z0-9\.\-]+$") ]; then
+    echo "Cannot  create user '$USER' in jail '$JAIL': invalid user name"
+    exit 1
+fi
+
 if [ ! -d "/usr/jails/$JAIL" ]; then
-    echo "Cannot create user in jail '$JAIL', this jail does not exist"
+    echo "Cannot create user in jail '$JAIL': jail does not exist"
     exit 1
 fi
 
-if [ -d "/usr/jails/$JAIL/home/$USER" ]; then
-    echo "Cannot create user '$USER' in jail '$JAIL', this user already exists"
+if [ ! -z "$(grep -E "^$USER:" "/usr/jails/$JAIL/etc/passwd")" ]; then
+    echo "Cannot create user '$USER' in jail '$JAIL': user already exists"
     exit 1
 fi
 
-ezjail-admin console -e "pw user add '$USER' -m -d '/home/$USER' -G service"
+echo "Creating user '$USER' in jail '$JAIL'"
+ezjail-admin console -e "pw user add $USER -m -d /home/$USER -G service" "$JAIL"

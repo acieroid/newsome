@@ -13,9 +13,13 @@ cp /usr/jails/flavours/{example,default}/etc/make.conf
 cp /usr/jails/flavours/{example,default}/etc/rc.conf
 cp /usr/jails/flavours/{example,default}/etc/periodic.conf
 cp /etc/resolv.conf /usr/jails/flavours/default/etc/resolv.conf
-cp /usr/jails/flavours/{example,default}/etc/rc.d/ezjail.flavour.example
-mkdir /usr/jails/flavours/default/pkg
-cp /var/cache/pkg-*.txz /usr/jails/flavours/default/pkg/
+# As of FreeBSD 10, pkg_add does not exist and it doesn't seem to be possible to
+# automatically setup pkg in a jail
+#cp /usr/jails/flavours/{example,default}/etc/rc.d/ezjail.flavour.example
+#cd /usr/jails/flavours/default/pkg
+#REPO=$(pkg -vv | grep pkg.FreeBSD.org | sed -E 's|.*(http://.*/latest).*|\1|g')
+#PKGVERSION=$(pkg info pkg | grep Version | cut -d':' -f 2 | cut -c2-)
+#fetch "$REPO/All/pkg-$PKGVERSION.txz"
 
 http://pkg.freebsd.org/freebsd:10:x86:64/release/0/All/pkg-1.2.4_1.txz
 
@@ -50,7 +54,8 @@ ezjail-admin console -e "pkg" master # answer y
 
 # nginx in master
 # TODO: ssl (one per subdomain)
-# TODO: factor ezjail-admin console -e x jail
+# TODO: replace error pages nicer pages (eg. 502 should tell "this service is
+# not runnig")
 ezjail-admin console -e "pkg -y install nginx" master
 cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir -p /usr/jails/master/usr/local/www/master/

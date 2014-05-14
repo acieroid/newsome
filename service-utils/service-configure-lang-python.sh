@@ -16,7 +16,7 @@ extract() {
 JAIL="$(extract JAIL)"
 SERVICE="$(basename $SERVICE_FILE)"
 
-ezjail-admin console -e "pkg install -y python py-virtualenv py-pip" "$JAIL"
+ezjail-admin console -e "pkg install -y python27 py27-virtualenv py27-pip" "$JAIL"
 mkdir -p "/usr/jails/$JAIL/root/services/"
 cp "$SERVICE_FILE" "/usr/jails/$JAIL/root/services/$SERVICE"
 ezjail-admin console -e "service-setup-type-python.sh /root/services/$SERVICE" "$JAIL"

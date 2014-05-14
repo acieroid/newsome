@@ -3,11 +3,13 @@
 ## Meta
 
 # Name of the service
-NAME="paste-py"
+NAME="paste"
 # Jail on which the service is installed
 JAIL="test"
 # Language used by this service (will influence the way it is installed)
 LANG="python"
+# Host which will host this service (on $NAME.$HOST)
+HOST="foo.com"
 # Category of the service
 TYPE="www"
 # On which port to connect
@@ -15,7 +17,7 @@ PORT="8000"
 # Dependencies (other than language)
 DEPS="git"
 # Python dependencies (installed with pip in a virtualenv)
-PYTHON_DEPS="Pygments tornado grizzled"
+PYTHON_DEPS="Pygments tornado"
 # Sources
 SOURCES="https://github.com/acieroid/paste-py.git"
 

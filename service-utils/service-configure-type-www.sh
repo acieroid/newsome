@@ -15,14 +15,17 @@ jail_ip() {
     ezjail-admin list | grep "/usr/jails/$1" | awk '{ print $3 }'
 }
 
-NAME="$(extract NAME)"
-PORT="$(extract PORT)"
-IP="$(jail_ip NAME)"
+NAME=$(extract NAME)
+PORT=$(extract PORT)
+HOST=$(extract HOST)
+JAIL=$(extract JAIL)
+IP=$(jail_ip $JAIL)
 
-# TODO: parameter for domain name
+echo "Adding redirection on $NAME.$HOST to $IP:$PORT"
+mkdir -p /usr/jails/master/usr/local/etc/nginx/services.d/
 echo "server {
     listen 80;
-    server_name $NAME.foo.com
+    server_name $NAME.$HOST;
     location / {
         proxy_pass http://$IP:$PORT;
     }

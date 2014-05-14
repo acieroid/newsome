@@ -17,29 +17,33 @@ if [ "$?" -ne 0 ]; then
     exit 1
 fi
 
-JAIL="$(extract JAIL)"
+JAIL=$(extract JAIL)
+echo "Creating jail $JAIL"
 service-create-jail.sh "$JAIL"
 if [ "$?" -ne 0 ]; then
     echo "Error when creating jail $JAIL"
     exit 1
 fi
 
-NAME="$(extract NAME)"
+NAME=$(extract NAME)
+echo "Creating user $NAME in jail $JAIL"
 service-create-user.sh "$JAIL" "$NAME"
-if [ "?" -ne 0 ]; then
+if [ "$?" -ne 0 ]; then
     echo "Error when creating user $NAME"
     exit 1
 fi
 
-LANG="$(extract LANG)"
-TYPE="$(extract TYPE)"
-DEPS="$(extract DEPS)"
+LANG=$(extract LANG)
+TYPE=$(extract TYPE)
+DEPS=$(extract DEPS)
 
+echo "Installing the following dependencies in jail $JAIL: $DEPS"
 ezjail-admin console -e "pkg install -y '$DEPS'" "$JAIL"
 
 case "$TYPE" in
     www)
-        service-configure-type-www.sh "$SERVICE_FILE"
+        echo "Configuring web service"
+        #service-configure-type-www.sh "$SERVICE_FILE"
         ;;
     *)
         echo "Service type not (yet) handled: $TYPE"
@@ -48,7 +52,8 @@ esac
 
 case "$LANG" in
     python)
-        service-configure-lang-python.sh "$SERVICE_FILE"
+        echo "Configuring python service"
+        #service-configure-lang-python.sh "$SERVICE_FILE"
         ;;
     *)
         echo "Service language not (yet) handled: $LANG"

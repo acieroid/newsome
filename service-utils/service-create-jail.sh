@@ -16,22 +16,23 @@ if [ -d "/usr/jails/$JAIL" ]; then
 fi
 
 next_ip() {
-    IP="$(ezjail-admin list | awk '/172/ { print $3 }' | sort -g | tail -1)"
-    FIRSTBYTES="$(echo \"$IP\" | cut -d. -f1-2)"
-    LASTBYTE="$(echo \"$IP\" | cut -d. -f4)"
-    BEFORETOLASTBYTE="$(echo \"$IP\" | cut -d. -f3)"
+    IP=$(ezjail-admin list | awk '/172/ { print $3 }' | sort -g | tail -1)
+    FIRSTBYTES=$(echo "$IP" | cut -d. -f1-2)
+    LASTBYTE=$(echo "$IP" | cut -d. -f4)
+    BEFORETOLASTBYTE=$(echo "$IP" | cut -d. -f3)
     if [ "$LASTBYTE" -eq "255" ]; then
-        BTL="$(echo \"$BEFORETOLASTBYTE 1 + p\" | dc)"
+        BTL=$(echo "$BEFORETOLASTBYTE 1 + p" | dc)
         echo "$FIRSTBYTES.$BTL.1"
     else
-        L="$(echo \"$LASTBYTE 1 + p\" | dc)"
+        L=$(echo "$LASTBYTE 1 + p" | dc)
         echo "$FIRSTBYTES.$BEFORETOLASTBYTE.$L"
     fi
 }
 
 IP=$(next_ip)
 
+echo "Creating jail '$JAIL' with IP '$IP'"
 ezjail-admin create -f slave "$JAIL" "lo1|$IP"
 ezjail-admin start "$JAIL"
-ezjail-admin console -e "pkg" "$JAIL" "$JAIL" # TODO: have pkgng already configured in the flavour
-ezjail-admin console -e "pw group add service"
+ezjail-admin console -e "pkg" "$JAIL" # TODO: have pkgng already configured in the flavour
+ezjail-admin console -e "pw group add service" "$JAIL"

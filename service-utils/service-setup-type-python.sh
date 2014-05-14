@@ -20,15 +20,17 @@ extract() {
 }
 
 NAME="$(extract NAME)"
-su - name
+su - "$NAME" # TODO: cannot su
 
 if [ ! -f "$SERVICE_FILE" ]; then
     echo "$SERVICE_FILE is not an absolute path (and I really need one)"
     exit 1
 fi
 
+# TODO: don't rerun this if it has already been done
+
 virtualenv virtualenv
-source virtualenv/bin/activate.csh
+. virtualenv/bin/activate
 . "$SERVICE_FILE"
 pip install "$PYTHON_DEPS"
 setup()
