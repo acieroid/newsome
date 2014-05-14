@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# This script creates and setup the jail, user account, dependencies and
+# everything necessary for a particular service to run. It must be launched on
+# the host.
+
 if [ "$#" -ne 1 ]; then
     echo "$0: expecting service file in argument"
     exit 1
@@ -60,4 +64,11 @@ case "$LANG" in
         ;;
 esac
 
-# TODO: other non-language related stuff (eg. backups)
+SERVICE=$(basename "$SERVICE_FILE")
+cp "$SERVICE_FILE" "/root/services/$SERVICE"
+
+echo "[program:$NAME]
+command=service-launch.sh /root/services/$SERVICE
+" > "/usr/local/etc/supervisor.d/$NAME.conf"
+
+# TODO: backups

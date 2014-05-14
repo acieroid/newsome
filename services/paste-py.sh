@@ -16,6 +16,9 @@ TYPE="www"
 PORT="8000"
 # Dependencies (other than language)
 DEPS="git"
+
+## Variables used in this script
+
 # Python dependencies (installed with pip in a virtualenv)
 PYTHON_DEPS="Pygments tornado"
 # Sources
@@ -25,11 +28,15 @@ SOURCES="https://github.com/acieroid/paste-py.git"
 
 # How to setup the program the first time
 setup() {
+    virtualenv virtualenv
+    . virtualenv/bin/activate
+    pip install "$PYTHON_DEPS"
     git clone "$SOURCES" paste-py
 }
 
 # How to launch the program
 start() {
+    . virtualenv/bin/activate
     cd paste-py
     python paste.py
 }
