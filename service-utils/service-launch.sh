@@ -23,4 +23,4 @@ fi
 JAIL=$(extract JAIL)
 NAME=$(extract NAME)
 
-jexec -U "$NAME" "$JAIL" service-launch-from-jail.sh "/home/$NAME/$SERVICE"
+jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$SERVICE"

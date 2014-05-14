@@ -20,7 +20,3 @@ SERVICE=$(basename $SERVICE_FILE)
 ezjail-admin console -e "pkg install -y python27 py27-virtualenv py27-pip" "$JAIL"
 mkdir -p "/usr/jails/$JAIL/root/services/"
 cp "$SERVICE_FILE" "/usr/jails/$JAIL/root/services/$SERVICE"
-
-# It doesn't seem possible to launch a script as a different user with
-# ezjail-admin, so we use jexec
-jexec -U "$NAME" "$JAIL" service-setup-type-python.sh "/home/$NAME/$SERVICE"

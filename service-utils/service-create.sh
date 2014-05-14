@@ -47,7 +47,7 @@ ezjail-admin console -e "pkg install -y '$DEPS'" "$JAIL"
 case "$TYPE" in
     www)
         echo "Configuring web service"
-        #service-configure-type-www.sh "$SERVICE_FILE"
+        service-configure-type-www.sh "$SERVICE_FILE"
         ;;
     *)
         echo "Service type not (yet) handled: $TYPE"
@@ -57,7 +57,7 @@ esac
 case "$LANG" in
     python)
         echo "Configuring python service"
-        #service-configure-lang-python.sh "$SERVICE_FILE"
+        service-configure-lang-python.sh "$SERVICE_FILE"
         ;;
     *)
         echo "Service language not (yet) handled: $LANG"
