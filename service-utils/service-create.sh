@@ -93,8 +93,8 @@ jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/services/$SERVICE" 
 echo "[program:$NAME]
 command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/services/$SERVICE\" start
 # command=service-launch.sh /root/services/$SERVICE
-" > "/usr/local/etc/supervisor.d/$NAME.ini"
+" > "/usr/local/etc/supervisord.d/$NAME.ini"
 
-supervisorctl update # TODO: or reread ?
+echo "Service added, please launch it with supervisord"
 
 # TODO: backups
