@@ -36,5 +36,5 @@ IP=$(next_ip)
 echo "Creating jail '$JAIL' with IP '$IP'"
 ezjail-admin create -f slave "$JAIL" "lo1|$IP"
 ezjail-admin start "$JAIL"
-ezjail-admin console -e "pkg" "$JAIL" # TODO: have pkgng already configured in the flavour
+ezjail-admin console -e "pkg update" "$JAIL"
 ezjail-admin console -e "pw group add service" "$JAIL"

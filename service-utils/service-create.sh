@@ -68,7 +68,7 @@ TYPE=$(extract TYPE)
 DEPS=$(extract DEPS)
 
 echo "Installing the following dependencies in jail $JAIL: $DEPS"
-ezjail-admin console -e "pkg install -y '$DEPS'" "$JAIL"
+ezjail-admin console -e "pkg install -y $DEPS" "$JAIL"
 
 # Configure some service-related stuff (eg. nginx redirection for web services)
 case "$TYPE" in
@@ -93,7 +93,7 @@ jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/services/$SERVICE" 
 echo "[program:$NAME]
 command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/services/$SERVICE\" start
 # command=service-launch.sh /root/services/$SERVICE
-" > "/usr/local/etc/supervisor.d/$NAME.conf"
+" > "/usr/local/etc/supervisor.d/$NAME.ini"
 
 supervisorctl update # TODO: or reread ?
 

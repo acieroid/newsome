@@ -68,3 +68,12 @@ ezjail-admin console -e "service nginx start" master
 # install service/jail manipulation utilities
 mkdir -p /root/bin
 cp ../service-utils/* /root/bin
+
+# supervisord
+pkg install -y py27-supervisor
+echo 'supervisord_enable="YES"' >> /etc/rc.conf
+cp supervisord.conf /usr/local/etc/supervisord.conf
+mkdir /usr/local/etc/supervisord.d/
+service supervisord start
+
+# TODO: add master's nginx to supervisor
