@@ -36,7 +36,7 @@ setup() {
 start() {
     . virtualenv/bin/activate
     cd paste-py
-    python paste.py
+    python paste.py --port="$PORT"
 }
 
 # How to update the program
