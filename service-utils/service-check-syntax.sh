@@ -24,21 +24,21 @@ fi
 
 
 check_number() {
-    if [ -z $(grep -E "^$1=\"[0-9]+\"" "$SERVICE_FILE") ]; then
+    if [ -z "$(grep -E "^$1=\"[0-9]+\"" "$SERVICE_FILE")" ]; then
         echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
         exit 1
     fi
 }
 
 check_name() {
-    if [ -z $(grep -E "^$1=\"[a-zA-Z0-9\.\-]+\"" "$SERVICE_FILE") ]; then
+    if [ -z "$(grep -E "^$1=\"[a-zA-Z0-9\.\-]+\"" "$SERVICE_FILE")" ]; then
         echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
         exit 1
     fi
 }
 
 check_list() {
-    if [ -z $(grep -E "^$1=\"[a-zA-Z0-9 \.\-]+\"" "$SERVICE_FILE") ]; then
+    if [ -z "$(grep -E "^$1=\"[a-zA-Z0-9 \.\-]+\"" "$SERVICE_FILE")" ]; then
         echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
         exit 1
     fi
@@ -46,7 +46,6 @@ check_list() {
 
 check_name NAME
 check_name JAIL
-check_name LANG
 check_name TYPE
 check_name HOST
 check_number PORT

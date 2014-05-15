@@ -22,17 +22,25 @@ fi
 . "$SERVICE_FILE"
 cd "/home/$NAME"
 
+# As some user-defined start, update or setup might call other bash scripts that
+# are badly written, but working, we don't handle errors. It should be the
+# user's job to do it.
+set +o errexit
+set +o nounset
+
+# Launch the action
 case "$ACTION" in
     start)
-        start()
+        start
         ;;
     update)
-        update()
+        update
         ;;
     setup)
-        setup()
+        setup
         ;;
     *)
         echo "Unknown action: $ACTION"
         exit 1
+        ;;
 esac

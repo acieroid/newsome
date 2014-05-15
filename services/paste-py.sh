@@ -28,7 +28,7 @@ SOURCES="https://github.com/acieroid/paste-py.git"
 setup() {
     virtualenv virtualenv
     . virtualenv/bin/activate
-    pip install "$PYTHON_DEPS"
+    pip install $PYTHON_DEPS
     git clone "$SOURCES" paste-py
 }
 
