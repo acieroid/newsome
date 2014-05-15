@@ -1,3 +1,7 @@
+#!/bin/sh
+set -o errexit
+set -o nounset
+
 # Minimal post-installation script. Set up pkgng, get newsome and launch the
 # real post-installation script.
 
@@ -15,7 +19,6 @@ echo 'nameserver 8.8.8.8' > /etc/resolv.conf
 #   enabled: yes
 # }' > /usr/local/etc/pkg/repos/FreeBSD.conf
 
-pkg
 pkg update
 pkg upgrade
 

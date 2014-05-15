@@ -1,3 +1,7 @@
+#!/bin/sh
+set -o errexit
+set -o nounset
+
 # ezjail setup
 pkg install -y ezjail
 echo 'ezjail_enable="YES"' >> /etc/rc.conf
