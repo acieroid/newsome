@@ -33,22 +33,20 @@ cp -Rp /usr/jails/flavours/default /usr/jails/flavours/slave
 mkdir -p /usr/jails/flavours/slave/root/bin
 cp -Rp ../service-utils/*.sh /usr/jails/flavours/slave/root/bin
 
-# pf
-echo 'pf_enable="YES"' >> /etc/rc.conf
-kldload pf.ko # TODO: replace by service pf start ?
-
+# pf & network
 echo 'cloned_interfaces="lo1"' >> /etc/rc.conf
 echo 'ifconfig_lo1="inet 172.16.0.1 netmask 255.255.255.0"' >> /etc/rc.conf
 ifconfig lo1 create inet 172.16.0.1 netmask 255.255.255.0
 
 # TODO: adapt the pf.conf with the machine configuration (interface, ip, etc.)
 cp pf.conf /etc/pf.conf
-pfctl -F all -f /etc/pf.conf
+echo 'pf_enable="YES"' >> /etc/rc.conf
+service pf start
 
 # master jail
 ezjail-admin create -f master master "lo1|172.16.0.1"
 ezjail-admin start master
-ezjail-admin console -e "pkg" master # answer y
+ezjail-admin console -e "pkg update" master # answer y
 
 # unbound in master: TODO
 #ezjail-admin console -e "fetch ftp://ftp.internic.net/domain/named.cache" master
@@ -58,18 +56,19 @@ ezjail-admin console -e "pkg" master # answer y
 # TODO: ssl (one per subdomain)
 # TODO: replace error pages nicer pages (eg. 502 should tell "this service is
 # not runnig")
-ezjail-admin console -e "pkg -y install nginx" master
+ezjail-admin console -e "pkg install -y nginx" master
 cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
-mkdir -p /usr/jails/master/usr/local/www/master/
+mkdir /usr/jails/master/usr/local/www/master/
 cp master-index.html /usr/jails/master/usr/local/www/master/index.html
-mkdir -p /usr/jails/master/usr/local/www/catchall/
+mkdir /usr/jails/master/usr/local/www/catchall/
 cp master-catchall-index.html /usr/jails/master/usr/local/www/catchall/index.html
 echo 'nginx_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "service nginx start" master
 
 # install service/jail manipulation utilities
 mkdir -p /root/bin
-cp ../service-utils/* /root/bin
+cp ../service-utils/*.sh /root/bin
+chmod +x /root/bin/*.sh
 
 # supervisord
 pkg install -y py27-supervisor

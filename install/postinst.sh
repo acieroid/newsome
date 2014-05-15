@@ -27,4 +27,5 @@ pkg install -y git
 
 # get newsome and launch
 git clone https://github.com/acieroid/newsome.git
-sh newsome/install/postinst-setup.sh
+cd newsome/install
+sh postinst-setup.sh

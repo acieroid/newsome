@@ -44,14 +44,3 @@ update() {
   cd paste-py
   git pull origin master
 }
-
-# How to check if the program is correctly running
-alive() {
-    ANSWER="$(curl --head "$WWW_URL" | head -1)"
-    if [  = "HTTP/1.1 200 OK"]; then
-        ALIVE="YES"
-    else
-        ALIVE="NO"
-        REASON="$ANSWER"
-    fi
-}
