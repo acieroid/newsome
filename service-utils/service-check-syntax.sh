@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # Check the syntax of a service file. As service file are also shell scripts,
 # but we don't want to source them to get the variables they define, for

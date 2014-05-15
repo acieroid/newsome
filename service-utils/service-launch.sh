@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # This script launches a service. It has to be called from supervisord, and does
 # not return (it is completely handled by supervisord)

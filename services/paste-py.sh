@@ -6,16 +6,14 @@
 NAME="paste"
 # Jail on which the service is installed
 JAIL="test"
-# Language used by this service (will influence the way it is installed)
-LANG="python"
 # Host which will host this service (on $NAME.$HOST)
 HOST="foo.com"
 # Category of the service
 TYPE="www"
 # On which port to connect
 PORT="8000"
-# Dependencies (other than language)
-DEPS="git"
+# Dependencies
+DEPS="python27 py27-virtualenv py27-pip git"
 
 ## Variables used in this script
 
@@ -39,6 +37,12 @@ start() {
     . virtualenv/bin/activate
     cd paste-py
     python paste.py
+}
+
+# How to update the program
+update() {
+  cd paste-py
+  git pull origin master
 }
 
 # How to check if the program is correctly running

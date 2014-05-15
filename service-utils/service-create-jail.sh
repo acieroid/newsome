@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # Create the jail for a service, if it does not already exist. The jail name
 # should be given in argument.

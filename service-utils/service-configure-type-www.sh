@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 if [ "$#" -ne 1 ]; then
     echo "$0: expecting service file in argument"

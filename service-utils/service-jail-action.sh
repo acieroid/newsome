@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # Do some action for a service from within the service's jail, given the
 # absolute path to the service file. This has to be launched from the service's
@@ -23,6 +25,9 @@ cd "/home/$NAME"
 case "$ACTION" in
     start)
         start()
+        ;;
+    update)
+        update()
         ;;
     setup)
         setup()

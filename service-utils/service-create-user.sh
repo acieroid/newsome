@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # Create an user (second argument) in the given jail (first argument), only if
 # the user does not already exist. If the user already exists, this script
