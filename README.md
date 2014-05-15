@@ -3,7 +3,8 @@ FreeBSD + ZFS Installation
 
 The `install` directory contains some stuff to get a FreeBSD running in no time,
 with a ZFS root file system! Get an [image of
-mfsBSD](http://mfsbsd.vx.sk/files/images/), boot it, and copy the
+mfsBSD](http://mfsbsd.vx.sk/files/images/), boot it, connect to it (ssh is
+running by default!) with root:mfsroot as credentials, and copy the
 `install/install.sh` script on it, using eg. fetch or scp.
 
 You will probably want to change some parameters in this script, such as the
@@ -17,6 +18,9 @@ can then reboot.
 
 Post-installation
 =================
+
+Note: from here, when asked whether you want to bootstrap pkgng, answer
+'y'. There doesn't seem to have a way to avoid pkgng to ask this question.
 
 You now have a complete FreeBSD installation. You can use it as-is, or continue
 this guide to get an awesome service management infrastructure.
@@ -57,5 +61,6 @@ This has been tested and works on the following versions of FreeBSD:
 TODO
 ====
   - Service update
+  - Make scripts idempotent
   - Maor test
   - What else?
