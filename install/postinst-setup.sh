@@ -12,20 +12,18 @@ echo 'ezjail_use_zfs_for_jails="YES"' >> /usr/local/etc/ezjail.conf
 ezjail-admin install
 
 # default flavour
-mkdir -p /usr/jails/flavours/default/{etc,etc/rc.d}
-cp /usr/jails/flavours/{example,default}/etc/make.conf
-cp /usr/jails/flavours/{example,default}/etc/rc.conf
-cp /usr/jails/flavours/{example,default}/etc/periodic.conf
+mkdir -p /usr/jails/flavours/default/etc /etc/rc.d
+cp /usr/jails/flavours/example/etc/make.conf /usr/jails/flavours/default/etc/make.conf
+cp /usr/jails/flavours/example/etc/rc.conf /usr/jails/flavours/default/etc/rc.conf 
+cp /usr/jails/flavours/example/etc/periodic.conf /usr/jails/flavours/default/etc/periodic.conf
 cp /etc/resolv.conf /usr/jails/flavours/default/etc/resolv.conf
 # As of FreeBSD 10, pkg_add does not exist and it doesn't seem to be possible to
 # automatically setup pkg in a jail
-#cp /usr/jails/flavours/{example,default}/etc/rc.d/ezjail.flavour.example
+#cp /usr/jails/flavours/example/etc/rc.d/ezjail.flavour.example  /usr/jails/flavours/default/etc/rc.d/ezjail.flavour.example
 #cd /usr/jails/flavours/default/pkg
 #REPO=$(pkg -vv | grep pkg.FreeBSD.org | sed -E 's|.*(http://.*/latest).*|\1|g')
 #PKGVERSION=$(pkg info pkg | grep Version | cut -d':' -f 2 | cut -c2-)
 #fetch "$REPO/All/pkg-$PKGVERSION.txz"
-
-http://pkg.freebsd.org/freebsd:10:x86:64/release/0/All/pkg-1.2.4_1.txz
 
 # master flavour
 cp -Rp /usr/jails/flavours/default /usr/jails/flavours/master
