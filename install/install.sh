@@ -6,54 +6,15 @@
 
 # To use:
 # ssh root@ip # mfsbsd connects with dhcp, root password: mfsroot
-# fetch http://path/to/install.sh
-# vi install.sh
+# fetch http://path/to/{install.sh,conf}
+# vi conf
 # sh install.sh
 
 ######################################################################
-##                          Parameters                              ##
+##                     Load Configuration file                      ##
 ######################################################################
 
-# The installation will completely wipe out the content of this disk
-DISK="ada0"
-
-# The machine's hostname
-# On a kimsufi, set it to your kimsufi's name (ks123456.kimsufi.com)
-HOSTNAME="foo"
-
-# The name of the ethernet interface
-# Do `ifconfig` or `ip link` to find it
-INTERFACE="rl0"
-
-# Static IP address
-# Set to DHCP to have a dynamic one
-# On a kimsufi, look at your current IP (`ifconfig` or `ip addr`)
-IP="inet 192.168.2.110 netmask 255.255.255.0 broadcast 192.168.2.255"
-
-# Address of the router
-# Generally the /24 of your IP followed by .1
-# On a kimsufi, the /24 of your IP followed by .254
-ROUTER="192.168.2.1"
-
-# Size of the swap partition
-# Depends on the usage. Generally 2 times the RAM size is good.
-# On a kimsufi, 4G is fine
-SWAPSIZE="1G"
-
-# FreeBSD version
-FREEBSD_VERSION="10.0-RELEASE"
-
-# Architecture
-ARCH="$(uname -m)"
-
-# DNS server to use
-DNS="8.8.8.8"
-
-# Debug mode (YES to activate it)
-DEBUG="NO"
-
-# Editor to edit files
-EDITOR="vi"
+. ./conf # exit by itself.
 
 ######################################################################
 ##                             Utils                                ##
@@ -120,11 +81,12 @@ if [ "$UID" != 0 ]; then
 not). Are you sure you want to continue?" "n"
 fi
 
-gpart list "$DISK" > /dev/null
+(gpart list $DISK || gpart create -s gpt $DISK) >/dev/null && gpart list $DISK > /dev/null
 if [ "$?" -ne 0 ]; then
     fail_if_no "WARNING: the following disk does not exist: \
 $DISK. Are you sure you want to continue?" "n"
 fi
+
 
 fail_if_no "WARNING: this script will erase everything present on the \
 following drive: $DISK. Are you OK with that?" "n"
@@ -133,6 +95,13 @@ ifconfig "$INTERFACE" > /dev/null
 if [ "$?" -ne 0 ]; then
     fail_if_no "WARNING: the following interface does not exist: \
 $INTERFACE. Are you sure you want to continue?" "n"
+fi
+
+# XXX avoid ICMP? No tools (dig/nslookup/host) for DNS queries.
+whois freebsd.org > /dev/null
+if [ "$?" -ne 0 ]; then
+	fail_if_no "WARNING: apparently outside world (freebsd.org) unreachable. \
+Are you sure you want to continue?" "n"
 fi
 
 fail_if_no "Please review the following configuration carefully:
@@ -205,10 +174,10 @@ if [ -z $(mount | grep 'tmpfs on /rw/root/sets') ]; then
 fi
 check cd /root/sets
 if [ ! -f base.txz ]; then
-    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/$FREEBSD_VERSION/base.txz
+    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/$ARCH/$ARCH/$FREEBSD_VERSION/base.txz
 fi
 if [ ! -f kernel.txz ]; then
-    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/amd64/amd64/$FREEBSD_VERSION/kernel.txz
+    check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/$ARCH/$ARCH/$FREEBSD_VERSION/kernel.txz
 fi
 
 check tar --unlink -xpJf base.txz -C /mnt/

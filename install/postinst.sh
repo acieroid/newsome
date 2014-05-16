@@ -5,8 +5,10 @@ set -o nounset
 # Minimal post-installation script. Set up pkgng, get newsome and launch the
 # real post-installation script.
 
+. ./conf
+
 # DNS
-echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+echo "nameserver $DNS" > /etc/resolv.conf
 
 # pkgng
 
