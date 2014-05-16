@@ -10,7 +10,7 @@ fi
 SERVICE_FILE="$1"
 
 extract() {
-    sed -nE "s/^$1=\"(.*)\".*/\1/p" "$SERVICE_FILE" | head -1
+    sed -nE "/^$1/{s/^$1=\"(.*)\".*/\1/p;q}" "$SERVICE_FILE"
 }
 
 jail_ip() {
