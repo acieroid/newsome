@@ -57,6 +57,10 @@ Compatibility
 =============
 This has been tested and works on the following versions of FreeBSD:
   - 10.0-RELEASE
+  - amd64 and i386
+  - both normal and standard edition
+
+Ensure your machine have enough RAM : ZFS required at least 512MB.
 
 TODO
 ====
