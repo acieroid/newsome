@@ -8,7 +8,7 @@ set -o nounset
 . ./conf
 
 # DNS
-echo "nameserver $DNS" > /etc/resolv.conf
+grep $DNS /etc/resolv.conf || echo "nameserver $DNS" > /etc/resolv.conf
 
 # pkgng
 

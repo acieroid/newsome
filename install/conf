@@ -15,10 +15,21 @@ HOSTNAME="newsome"
 INTERFACE="em0"
 
 # Static IP address
-# Set to DHCP to have a dynamic one
+# (XXX Set to DHCP to have a dynamic one; messing up with pf.conf)
 # On a kimsufi, look at your current IP (`ifconfig` or `ip addr`)
 # IP="inet 192.168.1.100 netmask 255.255.255.0 broadcast 192.168.1.255"
-IP="DHCP"
+IP="192.168.1.100"
+
+# Jail IPs
+JIPS="172.16.0.0/24"
+# Jail Master IP
+JMIP="172.16.0.1"
+
+# Jail network interface
+JINTERFACE="lo1"
+
+# Internal interface (local loop)
+IINTERFACE="lo0"
 
 # Address of the router
 # Generally the /24 of your IP followed by .1
@@ -44,4 +55,3 @@ DEBUG="NO"
 
 # Editor to edit files
 EDITOR="vi"
-

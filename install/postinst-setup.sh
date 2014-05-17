@@ -2,6 +2,18 @@
 set -o errexit
 set -o nounset
 
+if [ "$TERM" != "screen" ] && [ ! `tty | grep /dev/tty` ]; then
+	echo 'You should avoid running this script from a ssh connection'
+	echo 'as when launching pf the connection might be broken.'
+	echo 'Use a real tty, or launch from screen/tmux.'
+	echo ''
+	echo 'Press enter to continue (^C to abort)'
+	read tmp
+fi
+
+# load configuration
+. ./conf
+
 # ezjail setup
 pkg install -y ezjail
 echo 'ezjail_enable="YES"' >> /etc/rc.conf
@@ -34,17 +46,38 @@ mkdir -p /usr/jails/flavours/slave/root/bin
 cp -Rp ../service-utils/*.sh /usr/jails/flavours/slave/root/bin
 
 # pf & network
-echo 'cloned_interfaces="lo1"' >> /etc/rc.conf
-echo 'ifconfig_lo1="inet 172.16.0.1 netmask 255.255.255.0"' >> /etc/rc.conf
-ifconfig lo1 create inet 172.16.0.1 netmask 255.255.255.0
+echo "cloned_interfaces=\"$JINTERFACE\"" >> /etc/rc.conf
+echo "ifconfig_$JINTERFACE=\"inet $JMIP netmask 255.255.255.0\"" >> /etc/rc.conf
+ifconfig $JINTERFACE create inet $JMIP netmask 255.255.255.0
 
-# TODO: adapt the pf.conf with the machine configuration (interface, ip, etc.)
-cp pf.conf /etc/pf.conf
+mkpf() {
+	cat <<EOF
+# Interfaces
+ext_if = "$INTERFACE"
+int_if = "$IINTERFACE"
+jail_if= "$JINTERFACE"
+
+# IPs
+ext_ip = "$IP"
+jail_ext_ip = $ext_ip
+jail_ips = "$JIPS"
+jail_master_ip = "$JMIP"
+EOF
+	cat pf.conf.partial
+}
+mkpf >  pf.conf.gen
+echo 'Generated pf.conf:'
+echo '--- pf.conf START ---'
+cat pf.conf.gen
+echo '--- pf.conf END ---'
+echo 'is this ok? (^C to abort)'; read tmp
+
+cp pf.conf.gen /etc/pf.conf
 echo 'pf_enable="YES"' >> /etc/rc.conf
 service pf start
 
 # master jail
-ezjail-admin create -f master master "lo1|172.16.0.1"
+ezjail-admin create -f master master "$JINTERFACE|$JMIP"
 ezjail-admin start master
 ezjail-admin console -e "pkg update" master # answer y
 

@@ -1,0 +1,32 @@
+# Services
+host_ssh = "ssh"
+host_tcp = "{ " $host_ssh " auth } "
+host_udp = "{ domain }"
+
+master_tcp = "{ http https }"
+master_udp = "{ domain }"
+
+# Don't filter loopback interface
+set skip on lo0
+
+# Normalize entering packets
+scrub in all
+
+# NAT in jails to connect them to the outside world
+nat on $ext_if from $jail_ips to any -> $jail_ext_ip
+
+# Redirections from external IP to jails
+rdr pass on $ext_if proto tcp from any to $jail_ext_ip port $master_tcp -> $jail_master_ip 
+rdr pass on $ext_if proto udp from any to $jail_ext_ip port $master_udp -> $jail_master_ip 
+
+# Default policy
+block in log all
+pass out all
+pass on $jail_if
+
+# Protection against address spoofing
+antispoof log quick for { $int_if $ext_if $jail_if }
+
+# Let everything from the host pass
+pass in on { $ext_if } proto tcp to any port $host_tcp
+pass in on { $ext_if } proto udp to any port $host_udp
