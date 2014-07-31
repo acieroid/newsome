@@ -12,7 +12,7 @@ if [ "$TERM" != "screen" ] && [ ! `tty | grep /dev/tty` ]; then
 fi
 
 # load configuration
-. ./conf
+. ./parameters.sh
 
 # ezjail setup
 pkg install -y ezjail

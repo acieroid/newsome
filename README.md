@@ -1,16 +1,22 @@
 FreeBSD + ZFS Installation
 ==========================
 
-The `install` directory contains some stuff to get a FreeBSD running in no time,
-with a ZFS root file system! Get an [image of
+The `install` directory contains some stuff to get a FreeBSD running in no
+time, with a ZFS root file system! Get an [image of
 mfsBSD](http://mfsbsd.vx.sk/files/images/), boot it, connect to it (ssh is
-running by default!) with root:mfsroot as credentials, and copy the
-`install/install.sh` script on it, using eg. fetch or scp.
+running by default!) with root:mfsroot as credentials.
 
-You will probably want to change some parameters in this script, such as the
-network-related parameters. Just edit the script. When you're satisfied, launch
-`install.sh`:
+You will probably want to set some parameters concerning the installation, such
+as the network-related parameters. Just edit the ``parameters.sh`` script:
 
+    $ vi parameters.sh
+
+
+When you're satisfied, copy the parameters script and `install.sh`, and launch
+the installation:
+
+    $ scp install.sh parameters.sh root@ip:
+    $ ssh root@ip # mfsbsd connects with dhcp, root password: mfsroot
     # sh install.sh
 
 You will be prompted for a root password at the end of the procedure, and you
@@ -25,10 +31,13 @@ Note: from here, when asked whether you want to bootstrap pkgng, answer
 You now have a complete FreeBSD installation. You can use it as-is, or continue
 this guide to get an awesome service management infrastructure.
 
-Get the `postinst.sh` script and launch it. It will install fetch the necessary
-scripts and do the post-installation steps needed to get awesom's service
-management infrastructure running.
+Get the `postinst.sh` script (as well as your modified version of the
+`parameters.sh`` script) and launch it. It will fetch the necessary scripts and
+do the post-installation steps needed to get awesom's service management
+infrastructure running.
 
+    $ scp postinst.sh parameters.sh root@ip:
+    $ ssh root@ip # root password is the password you gave during installation
     # sh postinst.sh
 
 Service Management

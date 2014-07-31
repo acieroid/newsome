@@ -5,10 +5,15 @@ set -o nounset
 # Minimal post-installation script. Set up pkgng, get newsome and launch the
 # real post-installation script.
 
-. ./conf
+. ./parameters.sh
 
 # DNS
-grep $DNS /etc/resolv.conf || echo "nameserver $DNS" > /etc/resolv.conf
+if [ ! -f /etc/resolv.conf ]; then
+    echo "nameserver $DNS" > /etc/resolv.conf
+fi
+if [ -z "$(grep \"$DNS\" /etc/resolv.conf)" ]; then
+    echo "nameserver $DNS" > /etc/resolv.conf
+fi
 
 # pkgng
 
@@ -25,12 +30,9 @@ pkg update
 pkg upgrade
 
 # git
-pkg install -y git
-
-# moar
-pkg install -y vim-lite tmux
+pkg install -y git vim-lite tmux
 
 # get newsome and launch
 git clone https://github.com/acieroid/newsome.git
 cd newsome/install
-sh postinst-setup.sh
+tmux new-session "sh launch.sh sh postinst-setup.sh"

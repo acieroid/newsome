@@ -12,13 +12,13 @@ HOSTNAME="newsome"
 
 # The name of the ethernet interface
 # Do `ifconfig` or `ip link` to find it
-INTERFACE="em0"
+INTERFACE="rl0"
 
 # Static IP address
 # (XXX Set to DHCP to have a dynamic one; messing up with pf.conf)
 # On a kimsufi, look at your current IP (`ifconfig` or `ip addr`)
 # IP="inet 192.168.1.100 netmask 255.255.255.0 broadcast 192.168.1.255"
-IP="192.168.1.100"
+IP="192.168.2.235"
 
 # Jail IPs
 JIPS="172.16.0.0/24"
@@ -34,7 +34,7 @@ IINTERFACE="lo0"
 # Address of the router
 # Generally the /24 of your IP followed by .1
 # On a kimsufi, the /24 of your IP followed by .254
-ROUTER="10.0.2.2"
+ROUTER="192.168.2.1"
 
 # Size of the swap partition
 # Depends on the usage. Generally 2 times the RAM size is good.

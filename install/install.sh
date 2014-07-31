@@ -5,16 +5,16 @@
 # example.
 
 # To use:
+# scp install.sh parameters.sh root@ip:
 # ssh root@ip # mfsbsd connects with dhcp, root password: mfsroot
-# fetch http://path/to/{install.sh,conf}
-# vi conf
+# vi parameters.sh
 # sh install.sh
 
 ######################################################################
 ##                     Load Configuration file                      ##
 ######################################################################
 
-. ./conf # exit by itself.
+. ./parameters.sh # exit by itself.
 
 ######################################################################
 ##                             Utils                                ##
