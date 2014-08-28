@@ -67,13 +67,17 @@ Compatibility
 This has been tested and works on the following versions of FreeBSD:
   - 10.0-RELEASE
   - amd64 and i386
-  - both normal and standard edition
+  - both normal and standard edition of mfsBSD
 
 Ensure your machine have enough RAM : ZFS required at least 512MB.
 
-TODO
-====
-  - Service update
-  - Make scripts idempotent
-  - Maor test
-  - What else?
+Status
+======
+
+  - ✔ Installation script (`install/install.sh`): works great @acieroid
+  - ~ Post-installation (`install/*.sh`): not perfect @acieroid
+  - ~ Service management (`service-utils/`): almost complete:
+    - supervisor pipe
+    - service update
+    - more testing required
+  - ✗ Awesom services descriptions (`services/`): incomplete
