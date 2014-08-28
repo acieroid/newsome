@@ -13,7 +13,7 @@ fi
 SERVICE_FILE="$1"
 
 extract() {
-    sed -nE "/^$1/{s/^$1=\"(.*)\".*/\1/p;q}" "$SERVICE_FILE"
+    sed -nE "/^$1/{s/^$1=\"(.*)\".*/\1/p;q;}" "$SERVICE_FILE"
 }
 
 service-check-syntax.sh "$SERVICE_FILE"
@@ -25,4 +25,4 @@ fi
 JAIL=$(extract JAIL)
 NAME=$(extract NAME)
 
-jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$SERVICE"
+jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$SERVICE" start

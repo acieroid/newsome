@@ -32,7 +32,7 @@ You now have a complete FreeBSD installation. You can use it as-is, or continue
 this guide to get an awesome service management infrastructure.
 
 Get the `postinst.sh` script (as well as your modified version of the
-`parameters.sh`` script) and launch it. It will fetch the necessary scripts and
+`parameters.sh` script) and launch it. It will fetch the necessary scripts and
 do the post-installation steps needed to get awesom's service management
 infrastructure running.
 
@@ -75,9 +75,28 @@ Status
 ======
 
   - ✔ Installation script (`install/install.sh`): works great @acieroid
-  - ~ Post-installation (`install/*.sh`): not perfect @acieroid
+  - ~ Post-installation (`install/*.sh`): not perfect
+    - Not tested since last modification (pf.conf generation)
+    - TODO: install & setup unbound
+      - no idea of the requirements & how to configure
+    - TODO: SSL @nginx
+      - one certificate per domain?
+    - TODO: nicer default pages @nginx
+      - replace 502 by some information page
+      - awesom home page
+    - TODO: master nginx @supervisorctl
+    - TODO: script that checks the services pipes to relaunch services
+      - do this in python since python already installed for supervisorctl?
+      - the idea is to have a service.pipe for each running service, from which
+        this "supervisor manager" will read data, and depending on the data read
+        will start, stop, or restart the service
+      - could we also let the user update its service description file?
   - ~ Service management (`service-utils/`): almost complete:
-    - supervisor pipe
-    - service update
-    - more testing required
-  - ✗ Awesom services descriptions (`services/`): incomplete
+    - service-create.sh
+      - TODO: create supervisor pipe, only writable&readable by the user itself
+      - TODO: backups: how?
+        - maybe define a list of files/directories to backup in the service
+          description file
+    - more testing required, mostly on service compiling, launching, relaunching
+      and updating
+  - ✗ Awesom services descriptions (`services/`): incomplete (only paste)

@@ -41,6 +41,6 @@ start() {
 
 # How to update the program
 update() {
-  cd paste-py
-  git pull origin master
+    cd paste-py
+    git pull origin master
 }
