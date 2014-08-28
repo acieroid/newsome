@@ -3,12 +3,12 @@ set -o errexit
 set -o nounset
 
 if [ "$TERM" != "screen" ] && [ ! `tty | grep /dev/tty` ]; then
-	echo 'You should avoid running this script from a ssh connection'
-	echo 'as when launching pf the connection might be broken.'
-	echo 'Use a real tty, or launch from screen/tmux.'
-	echo ''
-	echo 'Press enter to continue (^C to abort)'
-	read tmp
+    echo 'You should avoid running this script from a ssh connection'
+    echo 'as when launching pf the connection might be broken.'
+    echo 'Use a real tty, or launch from screen/tmux.'
+    echo ''
+    echo 'Press enter to continue (^C to abort)'
+    read tmp
 fi
 
 # load configuration
@@ -51,7 +51,7 @@ echo "ifconfig_$JINTERFACE=\"inet $JMIP netmask 255.255.255.0\"" >> /etc/rc.conf
 ifconfig $JINTERFACE create inet $JMIP netmask 255.255.255.0
 
 mkpf() {
-	cat <<EOF
+    cat <<EOF
 # Interfaces
 ext_if = "$INTERFACE"
 int_if = "$IINTERFACE"
@@ -59,21 +59,23 @@ jail_if= "$JINTERFACE"
 
 # IPs
 ext_ip = "$IP"
-jail_ext_ip = $ext_ip
 jail_ips = "$JIPS"
 jail_master_ip = "$JMIP"
 EOF
-	cat pf.conf.partial
+    cat pf.conf.partial
 }
 mkpf >  pf.conf.gen
 echo 'Generated pf.conf:'
 echo '--- pf.conf START ---'
 cat pf.conf.gen
 echo '--- pf.conf END ---'
-echo 'is this ok? (^C to abort)'; read tmp
+echo 'Is this OK? (Enter to continue, ^C to abort)'; read tmp
 
 cp pf.conf.gen /etc/pf.conf
 echo 'pf_enable="YES"' >> /etc/rc.conf
+echo "WARNING: The connection might close here.
+If it is the case, reconnect and reattach tmux (with tmux a).
+Press enter to continue"; read tmp
 service pf start
 
 # master jail
@@ -87,8 +89,8 @@ ezjail-admin console -e "pkg update" master # answer y
 
 # nginx in master
 # TODO: ssl (one per subdomain)
-# TODO: replace error pages nicer pages (eg. 502 should tell "this service is
-# not runnig")
+# TODO: replace error with pages nicer pages (eg. 502 should tell "this service
+# is not runnig")
 ezjail-admin console -e "pkg install -y nginx" master
 cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir /usr/jails/master/usr/local/www/master/

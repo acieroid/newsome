@@ -1,3 +1,5 @@
+jail_ext_ip = $ext_ip
+
 # Services
 host_ssh = "ssh"
 host_tcp = "{ " $host_ssh " auth } "
