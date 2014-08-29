@@ -99,7 +99,18 @@ cp master-index.html /usr/jails/master/usr/local/www/master/index.html
 mkdir /usr/jails/master/usr/local/www/catchall/
 cp master-catchall-index.html /usr/jails/master/usr/local/www/catchall/index.html
 echo 'nginx_enable="YES"' >> /usr/jails/master/etc/rc.conf
+# TODO: supervisorctl instead of service
 ezjail-admin console -e "service nginx start" master
+
+# static jail
+ezjail-admin create -f slave static "$JINTERFACE|$JMIP"
+cp static-nginx.conf /usr/jails/static/usr/local/etc/nginx/nginx.conf
+# TODO: error pages
+mkdir /usr/jails/master/usr/local/www/catchall/
+cp static-catchall-index.html /usr/jails/static/usr/local/www/catchall/index.html
+echo 'nginx_enable="YES"' >> /usr/jails/static/etc/rc.conf
+# TODO: supervisorctl instead of service
+ezjaid-admin console -e "service nginx start" static
 
 # install service/jail manipulation utilities
 mkdir -p /root/bin

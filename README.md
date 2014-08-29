@@ -94,7 +94,9 @@ Status
     - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
     - service-create.sh
+      - TODO: parameters (eg. $JINTERFACE)
       - TODO: create supervisor pipe, only writable&readable by the user itself
+      - TODO: static websites (can be put on the master jail)
       - TODO: backups: how?
         - maybe define a list of files/directories to backup in the service
           description file
@@ -108,4 +110,7 @@ Status
             general
     - more testing required, mostly on service compiling, launching, relaunching
       and updating
+    - move services not needed by the admin somewhere else than in PATH to avoid
+      auto-completion on those services and therefore provide a simpler
+      interface
   - ✗ Awesom services descriptions (`services/`): incomplete (only paste)

@@ -24,8 +24,15 @@ if [ "$?" -ne 0 ]; then
     exit 1
 fi
 
-# Create the jail
+# A static website can only be on the "static" jail
+TYPE=$(extract TYPE)
 JAIL=$(extract JAIL)
+if [ "$TYPE" = "www-static" && "$JAIL" != "static" ]; then
+    echo "A static website can only be on the 'static' jail, and not on '$JAIL'"
+    exit 1
+fi
+
+# Create the jail
 echo "Creating jail $JAIL"
 if [ -d "/usr/jails/$JAIL" ]; then
     SERVICES="$(ls /usr/jails/$JAIL/home/)"
@@ -64,15 +71,17 @@ fi
 
 # Install dependencies
 LANG=$(extract LANG)
-TYPE=$(extract TYPE)
 DEPS=$(extract DEPS)
 
-echo "Installing the following dependencies in jail $JAIL: $DEPS"
-ezjail-admin console -e "pkg install -y $DEPS" "$JAIL"
+if [ -n "$DEPS" ]; then
+    echo "Installing the following dependencies in jail $JAIL: $DEPS"
+    ezjail-admin console -e "pkg install -y $DEPS" "$JAIL"
+fi
 
 # Configure some service-related stuff (eg. nginx redirection for web services)
 case "$TYPE" in
     www)
+    www-static)
         echo "Configuring web service"
         service-configure-type-www.sh "$SERVICE_FILE"
         ;;

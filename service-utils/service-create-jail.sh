@@ -13,8 +13,8 @@ fi
 JAIL="$1"
 
 if [ -d "/usr/jails/$JAIL" ]; then
-    echo "Cannot create jail '$JAIL', it already exists"
-    exit 1
+    echo "Not creating jail '$JAIL', it already exists."
+    exit 0
 fi
 
 next_ip() {
