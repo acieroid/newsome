@@ -91,12 +91,21 @@ Status
         this "supervisor manager" will read data, and depending on the data read
         will start, stop, or restart the service
       - could we also let the user update its service description file?
+    - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
     - service-create.sh
       - TODO: create supervisor pipe, only writable&readable by the user itself
       - TODO: backups: how?
         - maybe define a list of files/directories to backup in the service
           description file
+      - TODO: how to let the user update its description?
+        - idea: the service should have a $NAME.sh in  his directory/repo, and
+          can send a update-description command through the pipe, resulting in
+          service-update-description.sh being run on the host (as it needs to
+          possibly update the host, port, or deps). A change to the jail or
+          service name should not be authorized.
+          - changes to the host might also be refused to avoid clashes, or in
+            general
     - more testing required, mostly on service compiling, launching, relaunching
       and updating
   - ✗ Awesom services descriptions (`services/`): incomplete (only paste)

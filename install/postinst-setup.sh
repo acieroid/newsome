@@ -89,8 +89,9 @@ ezjail-admin console -e "pkg update" master # answer y
 
 # nginx in master
 # TODO: ssl (one per subdomain)
-# TODO: replace error with pages nicer pages (eg. 502 should tell "this service
-# is not runnig")
+# TODO: replace error pages with nicer pages (eg. 502 should tell "this service
+# is not runnig", however in this case it should be handled by the conf in
+# nginx/services.d)
 ezjail-admin console -e "pkg install -y nginx" master
 cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir /usr/jails/master/usr/local/www/master/
