@@ -92,8 +92,7 @@ esac
 
 # Copy the service file in the user's directory (inside the jail)
 SERVICE=$(basename "$SERVICE_FILE")
-mkdir "/usr/jails/$JAIL/home/$NAME/services/"
-cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/services/$SERVICE"
+cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/"
 
 # Setup the service
 jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/services/$SERVICE" setup
@@ -104,6 +103,15 @@ command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/servic
 stopasgroup=true ; needed to propagate the signal to the actual program
 " > "/usr/local/etc/supervisord.d/$NAME.ini"
 supervisorctl reread
+
+# Add to service-manager
+mkfifo "/usr/jails/$JAIL/home/$NAME/service.pipe"
+if [ -p /root/services.pipe ]; then
+    echo "add $JAIL $NAME" > /root/services.pipe
+else
+    echo "It seems that service-manager is not running. Please launch it and perform the following:"
+    echo "echo 'add $JAIL $NAME' > /root/services.pipe"
+else
 
 echo "Service added, you can launch it with supervisord (supervisorctl start \"$NAME\")"
 

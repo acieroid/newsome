@@ -88,8 +88,7 @@ Status
     - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
     - service-manager.py
-    - service-create.sh
-      - TODO: create supervisor pipe, only writable&readable by the user itself
+    - service-create.sh (not tested since last modification)
       - TODO: static websites: added, not tested
       - TODO: ssh of jail at IP 172.0.16.XXX on port 42XXX
       - TODO: parameters (eg. $JINTERFACE)
