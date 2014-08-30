@@ -85,18 +85,14 @@ Status
       - replace 502 by some information page
       - awesom home page
     - TODO: master nginx @supervisorctl
-    - TODO: script that checks the services pipes to relaunch services
-      - do this in python since python already installed for supervisorctl?
-      - the idea is to have a service.pipe for each running service, from which
-        this "supervisor manager" will read data, and depending on the data read
-        will start, stop, or restart the service
-      - could we also let the user update its service description file?
     - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
+    - service-manager.py
     - service-create.sh
-      - TODO: parameters (eg. $JINTERFACE)
       - TODO: create supervisor pipe, only writable&readable by the user itself
-      - TODO: static websites (can be put on the master jail)
+      - TODO: static websites: added, not tested
+      - TODO: ssh of jail at IP 172.0.16.XXX on port 42XXX
+      - TODO: parameters (eg. $JINTERFACE)
       - TODO: backups: how?
         - maybe define a list of files/directories to backup in the service
           description file
@@ -110,7 +106,7 @@ Status
             general
     - more testing required, mostly on service compiling, launching, relaunching
       and updating
-    - move services not needed by the admin somewhere else than in PATH to avoid
+    - move scripts not needed by the admin somewhere else than in PATH to avoid
       auto-completion on those services and therefore provide a simpler
       interface
   - ✗ Awesom services descriptions (`services/`): incomplete (only paste)

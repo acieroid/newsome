@@ -50,6 +50,7 @@ echo "cloned_interfaces=\"$JINTERFACE\"" >> /etc/rc.conf
 echo "ifconfig_$JINTERFACE=\"inet $JMIP netmask 255.255.255.0\"" >> /etc/rc.conf
 ifconfig $JINTERFACE create inet $JMIP netmask 255.255.255.0
 
+# TODO: drop in editor
 mkpf() {
     cat <<EOF
 # Interfaces
