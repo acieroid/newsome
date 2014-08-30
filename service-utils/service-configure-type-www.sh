@@ -43,7 +43,7 @@ case "$TYPE" in
     listen 80;
     server_name $NAME.$HOST;
     location / {
-        root /usr/home/$NAME/www/;
+        root /home/$NAME/www/;
     }
 }" > "/usr/jails/static/usr/local/etc/services.d/$NAME.conf"
         echo "Adding redirection on $NAME.$HOST to this static website"

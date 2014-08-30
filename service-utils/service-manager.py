@@ -11,7 +11,7 @@ SERVICES = []
 OPEN_FLAGS = os.O_RDONLY | os.O_NONBLOCK
 KEVENT_FILTER = select.KQ_FILTER_READ
 KEVENT_FLAGS = select.KQ_EV_ADD | select.KQ_EV_ENABLE
-PIPE_PATH = '/usr/jails/{0}/usr/home/{1}/service.pipe'
+PIPE_PATH = '/usr/jails/{0}/home/{1}/service.pipe'
 
 def signal_term_handler(signal, frame):
     os.remove(MAIN_PIPE)
