@@ -44,6 +44,7 @@ cp -Rp /usr/jails/flavours/default /usr/jails/flavours/master
 cp -Rp /usr/jails/flavours/default /usr/jails/flavours/slave
 mkdir -p /usr/jails/flavours/slave/root/bin
 cp -Rp ../service-utils/*.sh /usr/jails/flavours/slave/root/bin
+cp -Rp ../service-utils/*.py /usr/jails/flavours/slave/root/bin
 
 # pf & network
 echo "cloned_interfaces=\"$JINTERFACE\"" >> /etc/rc.conf
@@ -124,3 +125,10 @@ echo 'supervisord_enable="YES"' >> /etc/rc.conf
 cp supervisord.conf /usr/local/etc/supervisord.conf
 mkdir /usr/local/etc/supervisord.d/
 service supervisord start
+
+# enable service manager
+echo "[program:service-manager]
+command=/usr/local/bin/python2.7 /root/bin/service-manager.py
+" > "/usr/local/etc/supervisord.d/main_service-manager.ini"
+supervisorctl reread
+supervisorctl start main_service-manager

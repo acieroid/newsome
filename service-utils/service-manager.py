@@ -1,7 +1,9 @@
 #!/usr/local/bin/python2.7
 import os
 import select
+import signal
 import subprocess
+import sys
 
 MAIN_PIPE = '/root/services.pipe'
 STATE_FILE = '/root/services.state'
@@ -10,6 +12,10 @@ OPEN_FLAGS = os.O_RDONLY | os.O_NONBLOCK
 KEVENT_FILTER = select.KQ_FILTER_READ
 KEVENT_FLAGS = select.KQ_EV_ADD | select.KQ_EV_ENABLE
 PIPE_PATH = '/usr/jails/{0}/usr/home/{1}/service.pipe'
+
+def signal_term_handler(signal, frame):
+    os.remove(MAIN_PIPE)
+    sys.exit(0)
 
 def save_state(services):
     with open(STATE_FILE, 'w') as f:
@@ -67,6 +73,7 @@ def run():
     services, inv_services = load_state()
     while True:
         save_state(services.keys())
+        sys.stdout.flush() # without flushing, can't see the logs @supervisord
         evs = kqueue.control([main_kevent] + services.values(), 1, None)
         for ev in evs:
             fd, nbytes = ev.ident, ev.data
@@ -133,9 +140,10 @@ def run():
                     update_service_desc(service)
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, signal_term_handler)
     if os.path.exists(MAIN_PIPE):
         print('{0} already exists, please be sure that service-manager.py is not already running, and remove this file'.format(MAIN_PIPE))
-        exit(1)
+        sys.exit(1)
     try:
         os.mkfifo(MAIN_PIPE)
         run()
