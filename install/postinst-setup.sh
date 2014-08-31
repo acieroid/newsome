@@ -114,11 +114,6 @@ cp static-catchall-index.html /usr/jails/static/usr/local/www/catchall/index.htm
 echo 'nginx_enable="YES"' >> /usr/jails/static/etc/rc.conf
 ezjail-admin console -e "service nginx start" static
 
-# install service/jail manipulation utilities
-mkdir -p /root/bin
-cp ../service-utils/*.sh /root/bin
-chmod +x /root/bin/*.sh
-
 # supervisord
 pkg install -y py27-supervisor
 echo 'supervisord_enable="YES"' >> /etc/rc.conf
