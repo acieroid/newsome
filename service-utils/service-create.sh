@@ -57,14 +57,6 @@ if [ "$?" -ne 0 ]; then
     exit 1
 fi
 
-# Install needed shell scripts to the user inside the jail
-echo "Installing service-utils for user '$NAME' in jail '$JAIL'"
-service-utils-install.sh "$JAIL" "$NAME"
-if [ "$?" -ne 0 ]; then
-    echo "Error when installing service-utils for user '$NAME' in jail '$JAIL'"
-    exit 1
-fi
-
 # Install dependencies
 LANG=$(extract LANG)
 DEPS=$(extract DEPS)
