@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+import itertools
 import os
 import select
 import signal
@@ -62,8 +63,8 @@ def restart_service(service):
 def update_service(service):
     print('update_service: NYI')
 
-def update_desc(service):
-    print('update_desc: NYI')
+def update_service_desc(service):
+    print('update_service_desc: NYI')
 
 def run():
     main_fd = os.open(MAIN_PIPE, OPEN_FLAGS)
@@ -87,11 +88,15 @@ def run():
                 main_fd = os.open(MAIN_PIPE, OPEN_FLAGS)
                 main_kevent = select.kevent(main_fd, filter=KEVENT_FILTER,
                                             flags=KEVENT_FLAGS)
-                if len(data) != 3:
-                    print('Incorrect number of arguments received on main pipe: {0}'.format(data))
+                if len(data) < 1:
+                    print('Empty command received on main pipe: {0}'.format(data))
                     continue
-                cmd, jail, name = data
+                cmd = data[0]
                 if cmd == 'add':
+                    if len(data) != 3:
+                        print('Wrong number of arguments for add: {0}'.format(data))
+                        continue
+                    cmd, jail, name = data
                     if (jail, name) in services:
                         print('Ignoring addition of an already registered service: {0} on jail {1}'.format(name, jail))
                         continue
@@ -105,12 +110,27 @@ def run():
                     services[(jail, name)] = kev
                     inv_services[kev.ident] = (jail, name)
                 elif cmd == 'remove':
+                    if len(data) != 3:
+                        print('Wrong number of arguments for remove: {0}'.format(data))
+                        continue
+                    cmd, jail, name = data
                     if not (jail, name) in services:
                         print('Cannot remove a non-existent service: {0} on jail {1}'.format(name, jail))
                         continue
                     kev = services[(jail, name)]
                     os.close(fd)
                     del services[(jail, name)]
+                elif cmd == 'list':
+                    if len(data) != 1:
+                        print('Wrong number of arguments for list: {0}'.format(data))
+                        continue
+                    fst = lambda (x, y): x
+                    snd = lambda (x, y): y
+                    l = [(j, map(snd, list(s)))
+                         for (j, s) in itertools.groupby(services.keys(), key=fst)]
+                    print('List of services:')
+                    for (jail, servs) in l:
+                        print('Jail {0}: {1}'.format(jail, ', '.join(servs)))
                 else:
                     print('Unknown command on main pipe: {0}'.format(cmd))
             else:
