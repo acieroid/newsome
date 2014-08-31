@@ -27,7 +27,7 @@ fi
 # A static website can only be on the "static" jail
 TYPE=$(extract TYPE)
 JAIL=$(extract JAIL)
-if [ "$TYPE" = "www-static" && "$JAIL" != "static" ]; then
+if [ "$TYPE" = "www-static" -a "$JAIL" != "static" ]; then
     echo "A static website can only be on the 'static' jail, and not on '$JAIL'"
     exit 1
 fi
@@ -38,12 +38,8 @@ if [ -d "/usr/jails/$JAIL" ]; then
     SERVICES="$(ls /usr/jails/$JAIL/home/)"
     echo "Jail '$JAIL' already exists and contains the following services:
 $SERVICES
-Is it OK to add this service to this jail? [y/N]"
-    read ANSWER
-    if [ "$ANSWER" != "y" -o "$ANSWER" != "Y" ]; then
-        echo "Not adding the service to a currently existing jail"
-        exit 1
-    fi
+This new service will be added in this jail. Enter to continue, ^C to abort"
+    read tmp
 fi
 
 service-create-jail.sh "$JAIL"
@@ -80,8 +76,7 @@ fi
 
 # Configure some service-related stuff (eg. nginx redirection for web services)
 case "$TYPE" in
-    www)
-    www-static)
+    www|www-static)
         echo "Configuring web service"
         service-configure-type-www.sh "$SERVICE_FILE"
         ;;
@@ -94,14 +89,18 @@ esac
 cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/$NAME.sh"
 
 # Setup the service
+# TODO: output to a log? (to avoid confusion when launching this script)
 jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$NAME.sh" setup
 
-# Add supervisord stuff to launch it
-echo "[program:$NAME]
+
+if [ "$TYPE" != "www-static" ]; then
+    # Add supervisord stuff to launch it
+    echo "[program:$NAME]
 command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/$NAME.sh\" start
 stopasgroup=true ; needed to propagate the signal to the actual program
 " > "/usr/local/etc/supervisord.d/$NAME.ini"
-supervisorctl reread
+    supervisorctl reread
+fi
 
 # Add to service-manager
 mkfifo "/usr/jails/$JAIL/home/$NAME/service.pipe"
@@ -110,7 +109,7 @@ if [ -p /root/services.pipe ]; then
 else
     echo "It seems that service-manager is not running. Please launch it and perform the following:"
     echo "echo 'add $JAIL $NAME' > /root/services.pipe"
-else
+fi
 
 echo "Service added, you can launch it with supervisord (supervisorctl start \"$NAME\")"
 

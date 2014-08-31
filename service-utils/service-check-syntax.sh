@@ -25,21 +25,21 @@ fi
 
 check_number() {
     if [ -z "$(grep -E "^$1=\"[0-9]+\"" "$SERVICE_FILE")" ]; then
-        echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
+        echo "$SERVICE_FILE: missing or incorrect declaration of variable $1"
         exit 1
     fi
 }
 
 check_name() {
     if [ -z "$(grep -E "^$1=\"[a-zA-Z0-9\.\-]+\"" "$SERVICE_FILE")" ]; then
-        echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
+        echo "$SERVICE_FILE: missing or incorrect declaration of variable $1"
         exit 1
     fi
 }
 
 check_list() {
-    if [ -z "$(grep -E "^$1=\"[a-zA-Z0-9 \.\-]+\"" "$SERVICE_FILE")" ]; then
-        echo "$SERVICE_FILE: missing or incorrect declaration of variable $NAME"
+    if [ -z "$(grep -E "^$1=\"[a-zA-Z0-9 \.\-]*\"" "$SERVICE_FILE")" ]; then
+        echo "$SERVICE_FILE: missing or incorrect declaration of variable $1"
         exit 1
     fi
 }

@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# TODO: static services only need upate and update-desc
 import itertools
 import os
 import select

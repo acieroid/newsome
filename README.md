@@ -84,12 +84,14 @@ Status
     - TODO: nicer default pages @nginx
       - replace 502 by some information page
       - awesom home page
-    - TODO: master nginx @supervisorctl
     - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
     - service-manager.py
+      - ✔ start, stop, restart
+      - not tested: update
+      - ✗ update service description
     - service-create.sh (not tested since last modification)
-      - TODO: static websites: added, not tested
+      - TODO: permissions on file added in /home/service
       - TODO: ssh of jail at IP 172.0.16.XXX on port 42XXX
       - TODO: parameters (eg. $JINTERFACE)
       - TODO: backups: how?
@@ -103,6 +105,8 @@ Status
           service name should not be authorized.
           - changes to the host might also be refused to avoid clashes, or in
             general
+    - TODO: service-delete.sh: send remove command to service-manager,
+      then remove the user, and the jail if it is empty
     - more testing required, mostly on service compiling, launching, relaunching
       and updating
     - move scripts not needed by the admin somewhere else than in PATH to avoid
