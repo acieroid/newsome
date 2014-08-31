@@ -15,7 +15,8 @@ KEVENT_FLAGS = select.KQ_EV_ADD | select.KQ_EV_ENABLE
 PIPE_PATH = '/usr/jails/{0}/home/{1}/service.pipe'
 
 def signal_term_handler(signal, frame):
-    os.remove(MAIN_PIPE)
+    if os.path.exists(MAIN_PIPE):
+        os.remove(MAIN_PIPE)
     sys.exit(0)
 
 def save_state(services):
@@ -103,6 +104,7 @@ def run():
                     if not service_exists(jail, name):
                         print('Cannot add non-existent service: {0} on jail {1}'.format(name, jail))
                         continue
+                    print('Add service {0} on jail {1}'.format(name, jail))
                     fname = PIPE_PATH.format(jail, name)
                     kev = select.kevent(os.open(fname, OPEN_FLAGS),
                                         filter=KEVENT_FILTER,
@@ -117,8 +119,9 @@ def run():
                     if not (jail, name) in services:
                         print('Cannot remove a non-existent service: {0} on jail {1}'.format(name, jail))
                         continue
+                    print('Remove service {0} from jail {1}'.format(name, jail))
                     kev = services[(jail, name)]
-                    os.close(fd)
+                    os.close(kev.ident)
                     del services[(jail, name)]
                 elif cmd == 'list':
                     if len(data) != 1:
@@ -131,6 +134,7 @@ def run():
                     print('List of services:')
                     for (jail, servs) in l:
                         print('Jail {0}: {1}'.format(jail, ', '.join(servs)))
+                    print('End of list of services.')
                 else:
                     print('Unknown command on main pipe: {0}'.format(cmd))
             else:
