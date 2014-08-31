@@ -32,7 +32,7 @@ case "$TYPE" in
     listen 80;
     server_name $NAME.$HOST;
     location / {
-        proxy_set_header Host $host;
+        proxy_set_header Host \$host;
         proxy_pass http://$IP:$PORT;
     }
 }" > "/usr/jails/master/usr/local/etc/nginx/services.d/$NAME.conf"
@@ -53,7 +53,7 @@ case "$TYPE" in
     listen 80;
     server_name $NAME.$HOST;
     location / {
-        proxy_set_header Host $host;
+        proxy_set_header Host \$host;
         proxy_pass http://$IP:80;
     }
 }" > "/usr/jails/master/usr/local/etc/nginx/services.d/$NAME.conf"

@@ -91,7 +91,6 @@ Status
       - not tested: update
       - ✗ update service description
     - service-create.sh (not tested since last modification)
-      - TODO: permissions on file added in /home/service
       - TODO: ssh of jail at IP 172.0.16.XXX on port 42XXX
       - TODO: parameters (eg. $JINTERFACE)
       - TODO: backups: how?
@@ -107,9 +106,9 @@ Status
             general
     - TODO: service-delete.sh: send remove command to service-manager,
       then remove the user, and the jail if it is empty
-    - more testing required, mostly on service compiling, launching, relaunching
-      and updating
     - move scripts not needed by the admin somewhere else than in PATH to avoid
       auto-completion on those services and therefore provide a simpler
       interface
   - ✗ Awesom services descriptions (`services/`): incomplete (only paste)
+    - come up with a few skeleton (for go, pyhon, etc.) and guidelines (eg.
+     "don't rely on variables not defined inside the service file itself")

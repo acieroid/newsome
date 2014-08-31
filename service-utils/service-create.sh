@@ -79,11 +79,11 @@ esac
 
 # Copy the service file in the user's directory (inside the jail)
 cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/$NAME.sh"
+jexec "$JAIL" chown "$NAME" "/home/$NAME/$NAME.sh"
 
 # Setup the service
 # TODO: output to a log? (to avoid confusion when launching this script)
 jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$NAME.sh" setup
-
 
 if [ "$TYPE" != "www-static" ]; then
     # Add supervisord stuff to launch it
@@ -103,6 +103,11 @@ else
     echo "echo 'add $JAIL $NAME' > /root/services.pipe"
 fi
 
-echo "Service added, you can launch it with supervisord (supervisorctl start \"$NAME\")"
+echo "Service added"
+if [ "$TYPE" = "www-static" ]; then
+    echo "No need to launch it, it is already handled as it is a static service"
+else
+    echo "You can launch it with supervisord (supervisorctl start \"$NAME\")"
+fi
 
 # TODO: backups
