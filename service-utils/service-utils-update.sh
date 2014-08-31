@@ -18,5 +18,7 @@ if [ ! -d "/usr/jails/$JAIL" ]; then
     exit 1
 fi
 
-find "/usr/jails/$JAIL/home" -maxdepth 1 -exec \
-    cp -f /root/bin/service-jail-action.sh "{}/bin"
+if [ -d "/usr/jails/$JAIL/home" ]; then
+    find "/usr/jails/$JAIL/home" -maxdepth 1 -exec \
+        cp -f /root/bin/service-jail-action.sh "{}/bin" \;
+fi
