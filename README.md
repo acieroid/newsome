@@ -87,8 +87,7 @@ Status
     - TODO: host on which to listen in nginx.conf
   - ~ Service management (`service-utils/`): almost complete:
     - service-manager.py
-      - ✔ start, stop, restart
-      - not tested: update
+      - ✔ start, stop, restart, update
       - ✗ update service description
     - service-create.sh (not tested since last modification)
       - TODO: ssh of jail at IP 172.0.16.XXX on port 42XXX

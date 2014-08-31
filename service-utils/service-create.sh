@@ -96,6 +96,7 @@ fi
 
 # Add to service-manager
 mkfifo "/usr/jails/$JAIL/home/$NAME/service.pipe"
+jexec "$JAIL" chmod u+r-wx,g-r+w-x,o-rwx "/home/$NAME/service.pipe"
 if [ -p /root/services.pipe ]; then
     echo "add $JAIL $NAME" > /root/services.pipe
 else

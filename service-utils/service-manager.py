@@ -22,7 +22,9 @@ def signal_term_handler(signal, frame):
 
 def save_state(services):
     with open(STATE_FILE, 'w') as f:
-        f.writelines(['{0} {1}'.format(jail, name)
+        # "The name is intended to match readlines(); writelines() does not add
+        # line separators" WHY, PYTHON, WHY?
+        f.writelines(['{0} {1}\n'.format(jail, name)
                       for (jail, name) in services])
 
 def load_state():
@@ -31,7 +33,7 @@ def load_state():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, 'r') as f:
             for line in f:
-                splitted = line.split(' ')
+                splitted = line.rstrip().split(' ')
                 if len(splitted) != 2:
                     print('Ignoring malformed line in {0}: {1}'.format(STATE_FILE, line))
                 jail, name = splitted
@@ -66,8 +68,8 @@ def update_service(service):
     jail, name = service
     print('Updating {0}'.format(name))
     subprocess.call(["/usr/sbin/jexec",
-                     "-U", name, jail, "service-jail-action",
-                     "/home/{0}/{0}.sh", "start"])
+                     "-U", name, jail, "service-jail-action.sh",
+                     "/home/{0}/{0}.sh".format(name), "update"])
 
 def update_service_desc(service):
     print('update_service_desc: NYI')
