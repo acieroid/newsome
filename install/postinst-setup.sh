@@ -26,7 +26,8 @@ ezjail-admin install
 # default flavour
 mkdir -p /usr/jails/flavours/default/etc /etc/rc.d
 cp /usr/jails/flavours/example/etc/make.conf /usr/jails/flavours/default/etc/make.conf
-cp /usr/jails/flavours/example/etc/rc.conf /usr/jails/flavours/default/etc/rc.conf 
+cp /usr/jails/flavours/example/etc/rc.conf /usr/jails/flavours/default/etc/rc.conf
+echo 'sshd_enable="YES"' >> /usr/jails/flavours/default/etc/rc.conf
 cp /usr/jails/flavours/example/etc/periodic.conf /usr/jails/flavours/default/etc/periodic.conf
 cp /etc/resolv.conf /usr/jails/flavours/default/etc/resolv.conf
 # As of FreeBSD 10, pkg_add does not exist and it doesn't seem to be possible to
