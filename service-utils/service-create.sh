@@ -91,15 +91,14 @@ case "$TYPE" in
 esac
 
 # Copy the service file in the user's directory (inside the jail)
-SERVICE=$(basename "$SERVICE_FILE")
-cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/"
+cp "$SERVICE_FILE" "/usr/jails/$JAIL/home/$NAME/$NAME.sh"
 
 # Setup the service
-jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/services/$SERVICE" setup
+jexec -U "$NAME" "$JAIL" service-jail-action.sh "/home/$NAME/$NAME.sh" setup
 
 # Add supervisord stuff to launch it
 echo "[program:$NAME]
-command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/services/$SERVICE\" start
+command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/$NAME.sh\" start
 stopasgroup=true ; needed to propagate the signal to the actual program
 " > "/usr/local/etc/supervisord.d/$NAME.ini"
 supervisorctl reread

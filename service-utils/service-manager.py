@@ -62,7 +62,11 @@ def restart_service(service):
     subprocess.call(["/usr/local/bin/supervisorctl", "restart", name])
 
 def update_service(service):
-    print('update_service: NYI')
+    jail, name = service
+    print('Updating {0}'.format(name))
+    subprocess.call(["/usr/sbin/jexec",
+                     "-U", name, jail, "service-jail-action",
+                     "/home/{0}/{0}.sh", "start"])
 
 def update_service_desc(service):
     print('update_service_desc: NYI')
