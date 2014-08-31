@@ -49,17 +49,17 @@ def service_exists(jail, name):
 def start_service(service):
     jail, name = service
     print('Starting {0}'.format(name))
-    subprocess.call(["supervisorctl", "start", name])
+    subprocess.call(["/usr/local/bin/supervisorctl", "start", name])
 
 def stop_service(service):
     jail, name = service
     print('Stopping {0}'.format(name))
-    subprocess.call(["supervisorctl", "stop", name])
+    subprocess.call(["/usr/local/bin/supervisorctl", "stop", name])
 
 def restart_service(service):
     jail, name = service
     print('Restarting {0}'.format(name))
-    subprocess.call(["supervisorctl", "restart", name])
+    subprocess.call(["/usr/local/bin/supervisorctl", "restart", name])
 
 def update_service(service):
     print('update_service: NYI')
