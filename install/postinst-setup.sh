@@ -92,6 +92,8 @@ ezjail-admin console -e "pkg update" master # answer y
 ezjail-admin console -e "pkg install -y nsd" master
 echo 'nsd_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "nsd-control-setup"
+sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/MASTER_OUT_IP/$IP/g" nsd.conf > /usr/jails/master/usr/local/etc/nsd.conf
+sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/MASTER_OUT_IP/$IP/g" main.zone > "/usr/jails/master/usr/local/etc/${MAIN_DOMAIN}.conf"
 
 # nginx in master
 # TODO: ssl (one per subdomain)
@@ -99,7 +101,7 @@ ezjail-admin console -e "nsd-control-setup"
 # is not runnig", however in this case it should be handled by the conf in
 # nginx/services.d)
 ezjail-admin console -e "pkg install -y nginx" master
-sed 's/MAIN_DOMAIN/$MAIN_DOMAIN/g' master-nginx.conf > /usr/jails/master/usr/local/etc/nginx/nginx.conf
+sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g" master-nginx.conf > /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir /usr/jails/master/usr/local/www/master/
 cp master-index.html /usr/jails/master/usr/local/www/master/index.html
 mkdir /usr/jails/master/usr/local/www/catchall/

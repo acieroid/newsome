@@ -1,0 +1,16 @@
+$ORIGIN MAIN_DOMAIN.    ; default zone domain
+$TTL 86400              ; default time to live
+
+@ IN SOA foo.MAIN_DOMAIN. admin.MAIN_DOMAIN. (
+           2014092000  ; serial number
+           28800       ; Refresh
+           7200        ; Retry
+           864000      ; Expire
+           86400       ; Min TTL
+           )
+
+           NS      foo.MAIN_DOMAIN.
+           MX      10 mail.MAIN_DOMAIN.
+
+*          IN     A    MASTER_OUT_IP
+
