@@ -96,7 +96,7 @@ ezjail-admin console -e "pkg update" master # answer y
 # is not runnig", however in this case it should be handled by the conf in
 # nginx/services.d)
 ezjail-admin console -e "pkg install -y nginx" master
-cp master-nginx.conf /usr/jails/master/usr/local/etc/nginx/nginx.conf
+sed 's/MAIN_DOMAIN/$MAIN_DOMAIN/g' master-nginx.conf > /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir /usr/jails/master/usr/local/www/master/
 cp master-index.html /usr/jails/master/usr/local/www/master/index.html
 mkdir /usr/jails/master/usr/local/www/catchall/

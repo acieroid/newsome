@@ -9,6 +9,9 @@ DISK="ada0"
 # On a kimsufi, set it to your kimsufi's name (ks123456.kimsufi.com)
 HOSTNAME="newsome"
 
+# Main domain of the machine (eg. awesom.eu)
+MAIN_DOMAIN="home.lan"
+
 # The name of the ethernet interface
 # Do `ifconfig` or `ip link` to find it
 INTERFACE="rl0"
