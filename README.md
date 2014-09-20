@@ -77,8 +77,10 @@ Status
   - ✔ Installation script (`install/install.sh`): works great @acieroid
   - ~ Post-installation (`install/*.sh`): not perfect
     - Not tested since last modification (pf.conf generation)
-    - TODO: install & setup unbound
-      - no idea of the requirements & how to configure
+    - TODO: install & setup nsd
+      - wildcard that points to master
+      - other special cases will have to be handled by hand
+    - TODO: setup shells jail with qmail
     - TODO: SSL @nginx
       - one certificate per domain?
     - TODO: nicer default pages @nginx
