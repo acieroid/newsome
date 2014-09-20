@@ -89,6 +89,9 @@ ezjail-admin console -e "pkg update" master # answer y
 # unbound in master: TODO
 #ezjail-admin console -e "fetch ftp://ftp.internic.net/domain/named.cache" master
 #ezjail-admin console -e "mv named.cache /etc/unbound/root.hints" master
+ezjail-admin console -e "pkg install -y nsd" master
+echo 'nsd_enable="YES"' >> /usr/jails/master/etc/rc.conf
+ezjail-admin console -e "nsd-control-setup"
 
 # nginx in master
 # TODO: ssl (one per subdomain)
@@ -107,6 +110,7 @@ ezjail-admin console -e "service nginx start" master
 
 # static jail
 ezjail-admin create -f slave static "$JINTERFACE|$JSIP"
+ezjail-admin start static
 ezjail-admin console -e "pkg install -y nginx" static
 cp static-nginx.conf /usr/jails/static/usr/local/etc/nginx/nginx.conf
 # TODO: error pages
@@ -118,6 +122,7 @@ ezjail-admin console -e "service nginx start" static
 # install service/jail manipulation utilities
 mkdir -p /root/bin
 cp ../service-utils/*.sh /root/bin
+cp ../service-utils/*.py /root/bin
 chmod +x /root/bin/*.sh
 
 # supervisord
