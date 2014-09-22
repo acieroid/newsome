@@ -86,9 +86,6 @@ ezjail-admin create -f master master "$JINTERFACE|$JMIP"
 ezjail-admin start master
 ezjail-admin console -e "pkg update" master # answer y
 
-# unbound in master: TODO
-#ezjail-admin console -e "fetch ftp://ftp.internic.net/domain/named.cache" master
-#ezjail-admin console -e "mv named.cache /etc/unbound/root.hints" master
 ezjail-admin console -e "pkg install -y nsd" master
 echo 'nsd_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "nsd-control-setup" master
@@ -139,4 +136,4 @@ echo "[program:service-manager]
 command=/usr/local/bin/python2.7 /root/bin/service-manager.py
 " > "/usr/local/etc/supervisord.d/main_service-manager.ini"
 supervisorctl reread
-supervisorctl start main_service-manager
+supervisorctl start service-manager
