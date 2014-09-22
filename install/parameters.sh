@@ -28,6 +28,8 @@ JIPS="172.16.0.0/24"
 JMIP="172.16.0.1"
 # Jail Static IP
 JSIP="172.16.0.2"
+# JAil Users IP
+JUIP="172.16.0.3"
 
 # Jail network interface
 JINTERFACE="lo1"

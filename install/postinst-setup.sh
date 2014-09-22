@@ -64,6 +64,7 @@ jail_if= "$JINTERFACE"
 ext_ip = "$IP"
 jail_ips = "$JIPS"
 jail_master_ip = "$JMIP"
+jail_users_ip = "$JUIP"
 EOF
     cat pf.conf.partial
 }
@@ -91,6 +92,7 @@ echo 'nsd_enable="YES"' >> /usr/jails/master/etc/rc.conf
 ezjail-admin console -e "nsd-control-setup" master
 sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/MASTER_OUT_IP/$IP/g" nsd.conf > /usr/jails/master/usr/local/etc/nsd/nsd.conf
 sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/MASTER_OUT_IP/$IP/g" main.zone > "/usr/jails/master/usr/local/etc/nsd/${MAIN_DOMAIN}.zone"
+ezjail-admin console -e "service nsd start" master
 
 # nginx in master
 # TODO: ssl (one per subdomain)
@@ -98,7 +100,7 @@ sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/MASTER_OUT_IP/$IP/g" main.zone > "/usr/jails
 # is not runnig", however in this case it should be handled by the conf in
 # nginx/services.d)
 ezjail-admin console -e "pkg install -y nginx" master
-sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g" master-nginx.conf > /usr/jails/master/usr/local/etc/nginx/nginx.conf
+sed "s/MAIN_DOMAIN/$MAIN_DOMAIN/g;s/JUIP/$JUIP/g" master-nginx.conf > /usr/jails/master/usr/local/etc/nginx/nginx.conf
 mkdir /usr/jails/master/usr/local/www/master/
 cp master-index.html /usr/jails/master/usr/local/www/master/index.html
 mkdir /usr/jails/master/usr/local/www/catchall/
@@ -137,3 +139,12 @@ command=/usr/local/bin/python2.7 /root/bin/service-manager.py
 " > "/usr/local/etc/supervisord.d/main_service-manager.ini"
 supervisorctl reread
 supervisorctl start service-manager
+
+# add users jail
+ezjail-admin create -f slave users "$JINTERFACE|$JUIP"
+ezjail-admin start users
+ezjail-admin console -e "pkg install -y nginx tmux" users
+cp users-nginx.conf /usr/jails/users/usr/local/etc/nginx/nginx.conf
+echo 'nginx_enable="YES"' >> /usr/jails/users/etc/rc.conf
+ezjail-admin console -e "service nginx start" users
+echo "Post-installation done. Launch 'ezjail-admin console -e adduser users' to add users"
