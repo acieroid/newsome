@@ -76,7 +76,7 @@ Status
 
   - ✔ Installation script (`install/install.sh`): works great @acieroid
   - ~ Post-installation (`install/*.sh`): not perfect
-    - Not tested since last modification (nsd setup)
+    - Not tested since last modification (various fixes)
     - TODO: setup shells jail with qmail
     - TODO: SSL @nginx
       - one certificate per domain?
