@@ -200,6 +200,6 @@ echo 'zfs_enable="YES"' >> etc/rc.conf
 echo 'vfs.root.mountfrom="zfs:zroot"' >> boot/loader.conf
 echo 'PermitRootLogin yes' >> etc/ssh/sshd_config
 
-check chroot "$MNT" /passwd
+check chroot "$MNT" passwd
 
 echo "Installation done, you can now reboot!"
