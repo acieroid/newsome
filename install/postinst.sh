@@ -8,6 +8,7 @@ set -o nounset
 . ./parameters.sh
 
 # DNS
+# TODO: do this in install.sh?
 if [ ! -f /etc/resolv.conf ]; then
     echo "nameserver $DNS" > /etc/resolv.conf
 fi

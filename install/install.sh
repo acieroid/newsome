@@ -133,9 +133,9 @@ check gpart bootcode -b /boot/pmbr -p /boot/gptzfsboot -i 1 "$DISK"
 ######################################################################
 echo "3. Setting up ZFS"
 
-check zpool create -f -o altroot=/mnt -o cachefile=/var/tmp/zpool.cache zroot /dev/gpt/data
+check zpool create -f -o altroot="$MNT" -o cachefile="$VARTMP/zpool.cache" zroot /dev/gpt/data
 check zpool export zroot
-check zpool import -o altroot=/mnt -o cachefile=/var/tmp/zpool.cache zroot
+check zpool import -o altroot="$MNT" -o cachefile="$VARTMP/zpool.cache" zroot
 check zpool set bootfs=zroot zroot
 check zfs set checksum=fletcher4 zroot
 
@@ -158,7 +158,7 @@ check zfs set mountpoint=/tmp zroot/tmp
 check zfs set mountpoint=/usr zroot/usr
 check zfs set mountpoint=/var zroot/var
 
-check cd /mnt/
+check cd "$MNT"
 check chmod 1777 tmp
 check chmod 1777 var/tmp
 check ln -s usr/home home
@@ -180,15 +180,15 @@ if [ ! -f kernel.txz ]; then
     check ftp ftp.FreeBSD.org:/pub/FreeBSD/releases/$ARCH/$ARCH/$FREEBSD_VERSION/kernel.txz
 fi
 
-check tar --unlink -xpJf base.txz -C /mnt/
-check tar --unlink -xpJf kernel.txz -C /mnt/
+check tar --unlink -xpJf base.txz -C "$MNT"
+check tar --unlink -xpJf kernel.txz -C "$MNT"
 
 ######################################################################
 ##                           Part 5: Chroot                         ##
 ######################################################################
 echo "5. Configuring FreeBSD"
 
-check cd /mnt/
+check cd "$MNT"
 
 echo /dev/label/swap none swap sw 0 0 > etc/fstab
 echo 'zfs_load="YES"' > boot/loader.conf
@@ -200,6 +200,6 @@ echo 'zfs_enable="YES"' >> etc/rc.conf
 echo 'vfs.root.mountfrom="zfs:zroot"' >> boot/loader.conf
 echo 'PermitRootLogin yes' >> etc/ssh/sshd_config
 
-check chroot /mnt/ passwd
+check chroot "$MNT" /passwd
 
 echo "Installation done, you can now reboot!"

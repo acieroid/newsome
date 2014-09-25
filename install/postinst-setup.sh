@@ -65,6 +65,7 @@ ext_ip = "$IP"
 jail_ips = "$JIPS"
 jail_master_ip = "$JMIP"
 jail_users_ip = "$JUIP"
+
 EOF
     cat pf.conf.partial
 }

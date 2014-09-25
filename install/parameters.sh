@@ -2,6 +2,13 @@
 ##                          Parameters                              ##
 ######################################################################
 
+# This path should be writable (on a kimsufi rescue-cd, set it to /tmp)
+VARTMP="/var/tmp/"
+
+# This path should be able to support mounts (on a kimsufi rescue-cd,
+# create a /root/mnt and set it to this directory)
+MNT="/mnt"
+
 # The installation will completely wipe out the content of this disk
 DISK="ada0"
 
