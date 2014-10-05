@@ -6,7 +6,7 @@ set -o nounset
 # should be given in argument.
 
 if [ "$#" -ne 1 ]; then
-    echo "0: expecting jail name in argument"
+    echo "$0: expecting jail name in argument"
     exit 1
 fi
 

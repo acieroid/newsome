@@ -84,6 +84,8 @@ Status
       - replace 502 by some information page
       - awesom home page
     - TODO: host on which to listen in nginx.conf
+    - TODO: create new wheel user with ssh key, remove PermitRootLogin and
+      disable PasswordAuthentication in sshd_config
   - ~ Service management (`service-utils/`): almost complete:
     - service-manager.py
       - ✔ start, stop, restart, update
