@@ -6,13 +6,10 @@ PORT="8000"
 DEPS="git go"
 
 SOURCES="https://github.com/acieroid/goeland.git"
-GODEPS="github.com/kuroneko/gosqlite3"
 
 build() {
     export GOPATH=`pwd`
-    for dep in $GODEPS; do
-        go get "$dep"
-    done
+    go get ./...
     go build
 }
 
