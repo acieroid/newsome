@@ -10,7 +10,7 @@ SOURCES="https://github.com/acieroid/goeland.git"
 
 # One GOPATH per project, to reduce permissions, dependencies issues
 # at a higher storage cost.
-export GOPATH=`pwd`/gopath
+GOPATH=`pwd`/gopath
 
 build() {
     # Go dependencies
@@ -19,6 +19,9 @@ build() {
 }
 
 setup() {
+    if [ ! -d "$GOPATH" ]; then
+	    mkdir $GOPATH
+    fi
     git clone "$SOURCES" "$NAME"
     cd "$NAME"
     build
