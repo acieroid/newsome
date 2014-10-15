@@ -37,6 +37,13 @@ pkg install -y git vim-lite tmux
 # /usr/sbin/ntpd & /etc/ntp.conf should already be there; just enable
 grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
 
+# disable sendmail
+if grep sendmail_enable /etc/rc.conf; then
+	sed -i '/^sendmail_enable/ s/=.*/"NO"/' /etc/rc.conf
+else
+	echo 'sendmail_enable="NO"' >> /etc/rc.conf
+fi
+
 # get newsome and launch
 git clone https://github.com/acieroid/newsome.git
 cd newsome/install
