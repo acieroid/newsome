@@ -41,7 +41,7 @@ grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
 if grep sendmail_enable /etc/rc.conf; then
 	sed -i '/^sendmail_enable/ s/=.*/"NO"/' /etc/rc.conf
 else
-	echo 'sendmail_enable="NO"' >> /etc/rc.conf
+	echo 'sendmail_enable="NONE"' >> /etc/rc.conf
 fi
 
 # get newsome and launch
