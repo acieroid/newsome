@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # This script performs a clean install of FreeBSD, using ZFS. It can
 # be run on a mfsBSD or on a kimsufi in FreeBSD rescue mode for
@@ -59,14 +61,6 @@ check () {
     if [ "$DEBUG" = "YES" ]; then
         echo "done, press enter to continue"
         read foo
-    fi
-}
-
-check_prev () {
-    CMD="$@"
-    if [ "$?" != 0 ]; then
-        echo "ERROR: command $CMD failed, stopping"
-        exit 1
     fi
 }
 
@@ -202,18 +196,18 @@ echo 'PermitRootLogin yes' >> etc/ssh/sshd_config
 
 # Enable utf-8
 awk '
-	# start of default class
-	/^default/ { indef=1 }
-	# end of default class, append
-	/[^\\]$/ && indef == 1 {
-		print "\t:charset=UTF-8:\\"
-		print "\t:lang=en_US.UTF-8:\\"
-		indef=0
-	}
-	# print
-	{ print }' /etc/login.conf > /tmp/login.conf
-cp /tmp/login.conf /etc/login.conf
-cap_mkdb /etc/login.conf
+    # start of default class
+    /^default/ { indef=1 }
+    # end of default class, append
+    /[^\\]$/ && indef == 1 {
+        print "\t:charset=UTF-8:\\"
+        print "\t:lang=en_US.UTF-8:\\"
+        indef=0
+    }
+    # print
+    { print }' etc/login.conf > "$VARTMP/login.conf"
+cp "$VARTMP/login.conf" etc/login.conf
+check chroot "$MNT" cap_mkdb /etc/login.conf
 
 check chroot "$MNT" passwd
 
