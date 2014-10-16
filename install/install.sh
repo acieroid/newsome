@@ -1,4 +1,6 @@
 #!/bin/sh
+set -o errexit
+set -o nounset
 
 # This script performs a clean install of FreeBSD, using ZFS. It can
 # be run on a mfsBSD or on a kimsufi in FreeBSD rescue mode for
@@ -59,14 +61,6 @@ check () {
     if [ "$DEBUG" = "YES" ]; then
         echo "done, press enter to continue"
         read foo
-    fi
-}
-
-check_prev () {
-    CMD="$@"
-    if [ "$?" != 0 ]; then
-        echo "ERROR: command $CMD failed, stopping"
-        exit 1
     fi
 }
 
