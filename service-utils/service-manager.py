@@ -10,7 +10,7 @@ import sys
 MAIN_PIPE = '/root/services.pipe'
 STATE_FILE = '/root/services.state'
 SERVICES = []
-OPEN_FLAGS = os.O_RDONLY | os.O_NONBLOCK
+OPEN_FLAGS = os.O_RDONLY
 KEVENT_FILTER = select.KQ_FILTER_READ
 KEVENT_FLAGS = select.KQ_EV_ADD | select.KQ_EV_ENABLE
 PIPE_PATH = '/usr/jails/{0}/home/{1}/service.pipe'
@@ -82,7 +82,6 @@ def run():
     services, inv_services = load_state()
     while True:
         save_state(services.keys())
-        sys.stdout.flush() # without flushing, can't see the logs @supervisord
         evs = kqueue.control([main_kevent] + services.values(), 1, None)
         for ev in evs:
             fd, nbytes = ev.ident, ev.data
@@ -96,11 +95,11 @@ def run():
                 main_fd = os.open(MAIN_PIPE, OPEN_FLAGS)
                 main_kevent = select.kevent(main_fd, filter=KEVENT_FILTER,
                                             flags=KEVENT_FLAGS)
-                if len(data) < 1:
+                cmd = data[0]
+                if cmd == '':
                     print('Empty command received on main pipe: {0}'.format(data))
                     continue
-                cmd = data[0]
-                if cmd == 'add':
+                elif cmd == 'add':
                     if len(data) != 3:
                         print('Wrong number of arguments for add: {0}'.format(data))
                         continue
@@ -169,6 +168,7 @@ def run():
                     update_service(service)
                 elif cmd == 'update-desc':
                     update_service_desc(service)
+        sys.stdout.flush() # without flushing, can't see the logs @supervisord
 
 if __name__ == '__main__':
     signal.signal(signal.SIGTERM, signal_term_handler)
