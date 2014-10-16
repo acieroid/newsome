@@ -36,6 +36,7 @@ pkg install -y git vim-lite tmux
 # ntpd
 # /usr/sbin/ntpd & /etc/ntp.conf should already be there; just enable
 grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
+cp ntp.conf /etc/
 
 # disable sendmail
 if grep sendmail_enable /etc/rc.conf; then
