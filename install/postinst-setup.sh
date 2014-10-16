@@ -14,6 +14,18 @@ fi
 # load configuration
 . ./parameters.sh
 
+# ntpd
+# /usr/sbin/ntpd & /etc/ntp.conf should already be there; just enable
+grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
+cp ntp.conf /etc/
+
+# disable sendmail
+if grep sendmail_enable /etc/rc.conf; then
+    sed -i '/^sendmail_enable/ s/=.*/"NONE"/' /etc/rc.conf
+else
+    echo 'sendmail_enable="NONE"' >> /etc/rc.conf
+fi
+
 # ezjail setup
 pkg install -y ezjail
 echo 'ezjail_enable="YES"' >> /etc/rc.conf
@@ -30,6 +42,7 @@ cp /usr/jails/flavours/example/etc/rc.conf /usr/jails/flavours/default/etc/rc.co
 echo 'sshd_enable="YES"' >> /usr/jails/flavours/default/etc/rc.conf
 cp /usr/jails/flavours/example/etc/periodic.conf /usr/jails/flavours/default/etc/periodic.conf
 cp /etc/resolv.conf /usr/jails/flavours/default/etc/resolv.conf
+cp /etc/login.conf /usr/jails/flavours/default/etc/login.conf
 # As of FreeBSD 10, pkg_add does not exist and it doesn't seem to be possible to
 # automatically setup pkg in a jail
 #cp /usr/jails/flavours/example/etc/rc.d/ezjail.flavour.example  /usr/jails/flavours/default/etc/rc.d/ezjail.flavour.example
