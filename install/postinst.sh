@@ -35,7 +35,6 @@ pkg upgrade
 # git
 pkg install -y git vim-lite tmux
 
-
 # get newsome and launch
 git clone https://github.com/acieroid/newsome.git
 cd newsome/install

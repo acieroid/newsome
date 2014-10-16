@@ -16,11 +16,13 @@ fi
 
 # ntpd
 # /usr/sbin/ntpd & /etc/ntp.conf should already be there; just enable
-grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
-cp ntp.conf /etc/
+if [ -z $(grep ntpd /etc/rc.conf) ]; then
+    echo 'ntpd_enable="YES"' >> /etc/rc.conf
+    cp ntp.conf /etc/ntp.conf
+fi
 
 # disable sendmail
-if grep sendmail_enable /etc/rc.conf; then
+if [ -n $(grep sendmail_enable /etc/rc.conf) ]; then
     sed -i '/^sendmail_enable/ s/=.*/"NONE"/' /etc/rc.conf
 else
     echo 'sendmail_enable="NONE"' >> /etc/rc.conf
