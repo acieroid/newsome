@@ -202,18 +202,18 @@ echo 'PermitRootLogin yes' >> etc/ssh/sshd_config
 
 # Enable utf-8
 awk '
-	# start of default class
-	/^default/ { indef=1 }
-	# end of default class, append
-	/[^\\]$/ && indef == 1 {
-		print "\t:charset=UTF-8:\\"
-		print "\t:lang=en_US.UTF-8:\\"
-		indef=0
-	}
-	# print
-	{ print }' /etc/login.conf > /tmp/login.conf
-cp /tmp/login.conf /etc/login.conf
-cap_mkdb /etc/login.conf
+    # start of default class
+    /^default/ { indef=1 }
+    # end of default class, append
+    /[^\\]$/ && indef == 1 {
+        print "\t:charset=UTF-8:\\"
+        print "\t:lang=en_US.UTF-8:\\"
+        indef=0
+    }
+    # print
+    { print }' etc/login.conf > "$VARTMP/login.conf"
+cp "$VARTMP/login.conf" etc/login.conf
+check chroot "$MNT" cap_mkdb /etc/login.conf
 
 check chroot "$MNT" passwd
 
