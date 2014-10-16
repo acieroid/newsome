@@ -154,7 +154,7 @@ echo "[program:service-manager]
 command=/usr/local/bin/python2.7 /root/bin/service-manager.py
 " > "/usr/local/etc/supervisord.d/main_service-manager.ini"
 supervisorctl reread
-supervisorctl start service-manager
+supervisorctl update
 
 # add users jail
 ezjail-admin create -f slave users "$JINTERFACE|$JUIP"
