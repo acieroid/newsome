@@ -18,14 +18,16 @@ fi
 
 # pkgng
 
-# Not needed since FreeBSD 10 (maybe even 9.2 ?)
-# rm /usr/local/etc/pkg.conf
-# mkdir -p /usr/local/etc/pkg/repos
-# echo 'FreeBSD: {
-#   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
-#   mirror_type: "srv",
-#   enabled: yes
-# }' > /usr/local/etc/pkg/repos/FreeBSD.conf
+# Not needed since FreeBSD 10
+if [ -n "$(uname -r | grep '^9\.')" ]; then
+    rm /usr/local/etc/pkg.conf
+    mkdir -p /usr/local/etc/pkg/repos
+    echo 'FreeBSD: {
+  url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
+  mirror_type: "srv",
+  enabled: yes
+}' > /usr/local/etc/pkg/repos/FreeBSD.conf
+fi
 
 pkg update
 pkg upgrade
@@ -39,7 +41,7 @@ grep ntpd /etc/rc.conf || echo 'ntpd_enable="YES"' >> /etc/rc.conf
 
 # disable sendmail
 if grep sendmail_enable /etc/rc.conf; then
-	sed -i '/^sendmail_enable/ s/=.*/"NO"/' /etc/rc.conf
+	sed -i '/^sendmail_enable/ s/=.*/"NONE"/' /etc/rc.conf
 else
 	echo 'sendmail_enable="NONE"' >> /etc/rc.conf
 fi
