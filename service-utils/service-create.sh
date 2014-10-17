@@ -91,7 +91,7 @@ if [ "$TYPE" != "www-static" ]; then
 command=jexec -U \"$NAME\" \"$JAIL\" service-jail-action.sh \"/home/$NAME/$NAME.sh\" start
 stopasgroup=true ; needed to propagate the signal to the actual program
 " > "/usr/local/etc/supervisord.d/$NAME.ini"
-    supervisorctl reread
+    supervisorctl update
 fi
 
 # Add to service-manager
@@ -104,11 +104,6 @@ else
     echo "echo 'add $JAIL $NAME' > /root/services.pipe"
 fi
 
-echo "Service added"
-if [ "$TYPE" = "www-static" ]; then
-    echo "No need to launch it, it is already handled as it is a static service"
-else
-    echo "You can launch it with supervisord (supervisorctl start \"$NAME\")"
-fi
+echo "Service added and launched. If it is not a static service, you can control it with supervisorctl"
 
 # TODO: backups
