@@ -112,3 +112,10 @@ Status
   - ✗ Awesom services descriptions (`services/`): incomplete (only paste)
     - come up with a few skeleton (for go, pyhon, etc.) and guidelines (eg.
      "don't rely on variables not defined inside the service file itself")
+  - ✗ Documentation:
+    - List of current convention
+    - Software used
+    - Per script description
+    - Configuration files used and important options
+    - How to create a new service? (user point of view)
+    - How to deploy a new service? (admin perspective)
