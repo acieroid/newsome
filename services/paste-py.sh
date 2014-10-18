@@ -7,7 +7,7 @@ NAME="paste"
 # Jail on which the service is installed
 JAIL="test"
 # Host which will host this service (on $NAME.$HOST)
-HOST="foo.com"
+HOST="home.lan"
 # Category of the service
 TYPE="www"
 # On which port to connect

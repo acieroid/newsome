@@ -1,9 +1,10 @@
+#!/bin/sh
 NAME="goeland"
 JAIL="test"
-HOST="foo.com"
+HOST="home.lan"
 TYPE="www"
 PORT="8000"
-DEPS="git go"
+DEPS="sqlite3 git go"
 
 SOURCES="https://github.com/acieroid/goeland.git"
 

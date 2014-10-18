@@ -1,8 +1,7 @@
 #!/bin/sh
-
 NAME="static-example"
 JAIL="static"
-HOST="foo.com"
+HOST="home.lan"
 TYPE="www-static"
 PORT="0"
 DEPS=""

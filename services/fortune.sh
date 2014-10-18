@@ -1,6 +1,7 @@
+#!/bin/sh
 NAME="fortune"
 JAIL="test"
-HOST="foo.com"
+HOST="home.lan"
 TYPE="www"
 PORT="8081"
 DEPS="git go"
@@ -10,9 +11,7 @@ GODEPS=""
 
 build() {
     export GOPATH=`pwd`
-    for dep in $GODEPS; do
-        go get "$dep"
-    done
+    go get ./...
     go build
 }
 
