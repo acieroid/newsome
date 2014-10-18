@@ -35,8 +35,12 @@ fi
 # Create the jail
 echo "Creating jail $JAIL"
 if [ -d "/usr/jails/$JAIL" ]; then
-    SERVICES="$(ls /usr/jails/$JAIL/home/)"
-    echo "Jail '$JAIL' already exists and contains the following services:
+    if [ -d "/usr/jails/$JAIL/home/" ]; then
+        SERVICES="$(ls /usr/jails/$JAIL/home/)"
+    else
+        SERVICES="(no service)"
+    fi
+        echo "Jail '$JAIL' already exists and contains the following services:
 $SERVICES
 This new service will be added in this jail. Enter to continue, ^C to abort"
     read tmp
