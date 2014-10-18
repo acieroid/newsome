@@ -135,6 +135,9 @@ mkdir /usr/jails/static/usr/local/www/catchall/
 cp static-catchall-index.html /usr/jails/static/usr/local/www/catchall/index.html
 echo 'nginx_enable="YES"' >> /usr/jails/static/etc/rc.conf
 ezjail-admin console -e "service nginx start" static
+ezjail-admin console -e "pw group add service" static
+cp ../service-utils/service-jail-action.sh /usr/jails/static/usr/local/bin/
+chmod +x /usr/jails/static/usr/local/bin/service-jail-action.sh
 
 # install service/jail manipulation utilities
 mkdir -p /root/bin
