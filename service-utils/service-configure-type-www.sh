@@ -57,6 +57,7 @@ case "$TYPE" in
         proxy_pass http://$IP:80;
     }
 }" > "/usr/jails/master/usr/local/etc/nginx/services.d/$NAME.conf"
+        ezjail-admin console -e "service nginx reload" static
         ;;
 esac
 
