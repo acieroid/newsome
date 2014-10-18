@@ -65,7 +65,7 @@ It can notably be used to call update() to update the service.
 Compatibility
 =============
 This has been tested and works on the following versions of FreeBSD:
-  - 10.0-RELEASE
+  - 9.2-RELEASE, 10.0-RELEASE
   - amd64 and i386
   - both normal and standard edition of mfsBSD
 
