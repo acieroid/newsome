@@ -10,7 +10,9 @@ import sys
 MAIN_PIPE = '/root/services.pipe'
 STATE_FILE = '/root/services.state'
 SERVICES = []
-OPEN_FLAGS = os.O_RDONLY
+# We need to have non-blocking calls, and at least one writer on the pipe to
+# avoid receiving 0-byte read kevents
+OPEN_FLAGS = os.O_RDWR | os.O_NONBLOCK
 KEVENT_FILTER = select.KQ_FILTER_READ
 KEVENT_FLAGS = select.KQ_EV_ADD | select.KQ_EV_ENABLE
 PIPE_PATH = '/usr/jails/{0}/home/{1}/service.pipe'
