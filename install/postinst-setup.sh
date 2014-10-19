@@ -167,3 +167,6 @@ cp users-nginx.conf /usr/jails/users/usr/local/etc/nginx/nginx.conf
 echo 'nginx_enable="YES"' >> /usr/jails/users/etc/rc.conf
 ezjail-admin console -e "service nginx start" users
 echo "Post-installation done. Launch 'ezjail-admin console -e adduser users' to add users"
+
+# configuration of freebsd-update
+sed -i 's|^Components.*|Components world/base kernel|' /etc/freebsd-update.conf
