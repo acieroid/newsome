@@ -170,3 +170,17 @@ echo "Post-installation done. Launch 'ezjail-admin console -e adduser users' to 
 
 # configuration of freebsd-update
 sed -i 's|^Components.*|Components world/base kernel|' /etc/freebsd-update.conf
+
+# add admin
+pw useradd -n admin -u 999 -G wheel -m -s csh
+echo 'Please enter a public SSH key used to login as admin: '
+read ssh_key
+mkdir -p /home/admin/.ssh/
+echo $ssh_key > /home/admin/.ssh/authorized_keys
+
+# disable root login
+grep -v PermitRootLogin /etc/ssh/sshd_config > /tmp/sshd_config
+echo 'PermitRootLogin no' >> /tmp/sshd_config
+echo 'PasswordAuthentication no' >> /tmp/sshd_config
+mv /tmp/sshd_config /etc/ssh/sshd_config
+service sshd reload
